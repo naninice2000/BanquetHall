@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banquet Hall Menu Selection | iGrill</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #c59d5f;
+      --primary-hover: #b08947;
+      --bg-body: #f9fafb;
+      --bg-card: #ffffff;
+      --bg-surface: #f3f4f6;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      --border-dark: #d1d5db;
+      --badge-bg: #fdf8f0;
+      --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      font-size: 15px;
+      padding: 2.5rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: var(--badge-bg);
+      color: var(--primary);
+      border: 1px solid rgba(197, 157, 95, 0.35);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.85rem;
+      border-radius: 20px;
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header-section h1 {
+      color: var(--text-main);
+      font-size: 1.85rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.5rem;
+    }
+
+    .title-divider {
+      width: 45px;
+      height: 3px;
+      background-color: var(--primary);
+      margin: 0 auto 0.75rem auto;
+      border-radius: 2px;
+    }
+
+    .header-section p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .package-summary-card {
+      background: #fdfaf6;
+      border: 1px solid rgba(197, 157, 95, 0.3);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .package-summary-card h3 {
+      font-size: 1.1rem;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .package-summary-card ul {
+      padding-left: 1.2rem;
+      margin-bottom: 0.75rem;
+      color: #374151;
+      font-size: 0.9rem;
+    }
+
+    .pricing-note {
+      font-size: 0.82rem;
+      color: #78350f;
+      font-style: italic;
+      line-height: 1.45;
+    }
+
+    .section-block {
+      margin-bottom: 2.2rem;
+      padding-bottom: 1.8rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-block:last-of-type {
+      border-bottom: none;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .limit-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--badge-bg);
+      border: 1px solid rgba(197, 157, 95, 0.35);
+      padding: 0.15rem 0.65rem;
+      border-radius: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.65rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+    }
+
+    .input-hint {
+      display: block;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-group input[type="date"],
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-dark);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-family: var(--font-family);
+      font-size: 0.92rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .form-group select optgroup {
+      font-weight: 700;
+      color: var(--primary);
+      background: #ffffff;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(197, 157, 95, 0.2);
+    }
+
+    .choice-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .choice-row {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      margin-top: 0.25rem;
+    }
+
+    .choice-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      cursor: pointer;
+      font-size: 0.88rem;
+      user-select: none;
+    }
+
+    .choice-label input {
+      margin-top: 0.25rem;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Custom Input Container for Other Welcome Drink */
+    .other-drink-container {
+      margin-top: 0.75rem;
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .terms-box {
+      background: #fafafa;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .terms-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: #374151;
+      line-height: 1.45;
+      cursor: pointer;
+    }
+
+    .terms-item input {
+      margin-top: 0.2rem;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .check-all-label {
+      font-weight: 700;
+      color: var(--text-main);
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.6rem;
+      margin-top: 0.25rem;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: var(--primary);
+      color: #ffffff;
+      padding: 1rem;
+      border-radius: 6px;
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s, box-shadow 0.2s;
+      min-height: 48px;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(197, 157, 95, 0.3);
+    }
+
+    @media (max-width: 650px) {
+      body { padding: 1.25rem 0.6rem; }
+      .form-card { padding: 1.5rem 1rem; }
+      .form-grid-2 { grid-template-columns: 1fr; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-section">
+      <span class="header-badge">Banquet Hall Catering</span>
+      <h1>Banquet Hall Menu Selection</h1>
+      <div class="title-divider"></div>
+      <p>Select your dishes, optional add-ons, AV tech packages, and confirm event arrangements.</p>
+    </div>
+
+    <div class="form-card">
+      
+      <!-- Package Info Box -->
+      <div class="package-summary-card">
+        <h3>Special Package - $20/Guest (9 items)</h3>
+        <ul>
+          <li>Welcome Drink</li>
+          <li>Total of Six items (Appetizers, Curries, Rice items, and Desserts)</li>
+          <li>Jeera Rice / Plain Rice</li>
+          <li>Naan (plain/butter)</li>
+        </ul>
+        <div class="pricing-note">
+          <strong>Included in Base:</strong> All Veg, Paneer, Chicken, and Egg options.<br>
+          <strong>Extra Items Pricing (Beyond 6 items):</strong> $2 for Veg | $2.50 for Paneer, Chicken, or Egg | $3 for Lamb, Goat, Mutton, Fish, and Shrimp/Prawn.<br>
+          <em>(Minimum charges apply: $75 for Veg, $100 for Paneer/Kofta/Pani Puri/Pav Bhaji/Chicken, $150 for Goat/Fish/Shrimp)</em>
+        </div>
+      </div>
+
+      <form id="banquet-form" onsubmit="handleFormSubmit(event)">
+        
+        <!-- Section 1: Customer Details -->
+        <div class="section-block">
+          <div class="section-title">1. Customer & Booking Details</div>
+          <div class="section-subtitle">Confirm your booking details to map to your hall reservation.</div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" required placeholder="Enter full name" />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" required placeholder="(669) 000-0000" />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required placeholder="name@example.com" />
+            </div>
+            <div class="form-group">
+              <label for="eventDate">Event Date *</label>
+              <input type="date" id="eventDate" name="eventDate" required />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="slot">Session Slot *</label>
+              <select id="slot" name="slot" required>
+                <option value="">-- Select Session --</option>
+                <option value="Lunch">Lunch Session (11:00 AM – 3:30 PM)</option>
+                <option value="Dinner">Dinner Session (5:30 PM – 11:00 PM)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="advancePaid">Advance Paid *</label>
+              <input type="text" id="advancePaid" name="advancePaid" required placeholder="$250.00" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Welcome Drink & 6 Core Items -->
+        <div class="section-block">
+          <div class="section-title">
+            <span>2. Welcome Drink & Main Menu Items</span>
+            <span class="limit-badge">Limit to 3 Premium Items (*)</span>
+          </div>
+          <div class="section-subtitle">Select your welcome drink and 6 primary dishes included in the package.</div>
+
+          <div class="form-group">
+            <label>Welcome Drink *</label>
+            <div class="choice-group">
+              <label class="choice-label"><input type="radio" name="welcomeDrink" value="Fresh Watermelon Juice (Seasonal) - .50c/person or $35" onchange="toggleOtherDrink(false)" required> Fresh Watermelon Juice (Seasonal) - .50c per person or $35 (whichever is higher)</label>
+              <label class="choice-label"><input type="radio" name="welcomeDrink" value="Fresh Orange Juice (Seasonal) - .50c/person or $35" onchange="toggleOtherDrink(false)"> Fresh Orange Juice (Seasonal) - .50c per person or $35 (whichever is higher)</label>
+              <label class="choice-label"><input type="radio" name="welcomeDrink" value="Mango Mint Mojito (Famous)" onchange="toggleOtherDrink(false)"> Mango Mint Mojito (Famous)</label>
+              <label class="choice-label"><input type="radio" name="welcomeDrink" value="Mint Lemonade (Famous)" onchange="toggleOtherDrink(false)"> Mint Lemonade (Famous)</label>
+              <label class="choice-label"><input type="radio" name="welcomeDrink" value="Masala Chaas (Spiced Buttermilk)" onchange="toggleOtherDrink(false)"> Masala Chaas (Spiced Buttermilk)</label>
+              <label class="choice-label"><input type="radio" name="welcomeDrink" value="Masala Tea" onchange="toggleOtherDrink(false)"> Masala Tea</label>
+              <label class="choice-label"><input type="radio" name="welcomeDrink" value="Coffee" onchange="toggleOtherDrink(false)"> Coffee</label>
+              <label class="choice-label"><input type="radio" name="welcomeDrink" value="Other" id="otherDrinkRadio" onchange="toggleOtherDrink(true)"> Other</label>
+            </div>
+
+            <!-- Dynamic Input Box for Other Welcome Drink -->
+            <div class="other-drink-container" id="otherDrinkWrapper">
+              <input type="text" id="otherDrinkName" name="otherDrinkName" placeholder="Specify custom welcome drink name" />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="item01">Item 01 (Limit to 3 premium items, marked with *)*</label>
+              <select id="item01" name="item01" class="standard-menu-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="item02">Item 02 (Limit to 3 premium items, marked with *)*</label>
+              <select id="item02" name="item02" class="standard-menu-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="item03">Item 03 (Limit to 3 premium items, marked with *)*</label>
+              <select id="item03" name="item03" class="standard-menu-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="item04">Item 04 (Limit to 3 premium items, marked with *)*</label>
+              <select id="item04" name="item04" class="standard-menu-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="item05">Item 05 (Limit to 3 premium items, marked with *)*</label>
+              <select id="item05" name="item05" class="standard-menu-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="item06">Item 06 (Limit to 3 premium items, marked with *)*</label>
+              <select id="item06" name="item06" class="standard-menu-select" required></select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Rice Selection *</label>
+              <div class="choice-group">
+                <label class="choice-label"><input type="radio" name="rice" value="Steamed Rice" required> Steamed Rice</label>
+                <label class="choice-label"><input type="radio" name="rice" value="Jeera Rice"> Jeera Rice</label>
+                <label class="choice-label"><input type="radio" name="rice" value="Peas Pulao"> Peas Pulao</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Naan / Bread *</label>
+              <div class="choice-group">
+                <label class="choice-label"><input type="checkbox" name="bread" value="Plain Naan"> Plain Naan</label>
+                <label class="choice-label"><input type="checkbox" name="bread" value="Butter Naan"> Butter Naan</label>
+                <label class="choice-label"><input type="checkbox" name="bread" value="Garlic Naan (50 cents extra)"> Garlic Naan (50 cents extra)</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Extra Items (Optional) -->
+        <div class="section-block">
+          <div class="section-title">3. Optional Extra Items (Add-ons)</div>
+          <div class="section-subtitle">$2 for Veg | $2.50 for Paneer, Chicken, or Egg | $3 for Lamb, Goat, Mutton, Fish, and Shrimp/Prawn</div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="extra01">Extra Item 01</label>
+              <select id="extra01" name="extra01" class="extra-menu-select"><option value="">-- None --</option></select>
+            </div>
+            <div class="form-group">
+              <label for="extra02">Extra Item 02</label>
+              <select id="extra02" name="extra02" class="extra-menu-select"><option value="">-- None --</option></select>
+            </div>
+            <div class="form-group">
+              <label for="extra03">Extra Item 03</label>
+              <select id="extra03" name="extra03" class="extra-menu-select"><option value="">-- None --</option></select>
+            </div>
+            <div class="form-group">
+              <label for="extra04">Extra Item 04</label>
+              <select id="extra04" name="extra04" class="extra-menu-select"><option value="">-- None --</option></select>
+            </div>
+            <div class="form-group">
+              <label for="extra05">Extra Item 05</label>
+              <select id="extra05" name="extra05" class="extra-menu-select"><option value="">-- None --</option></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Beverage & Non-package Add-ons -->
+        <div class="section-block">
+          <div class="section-title">4. Water Bottles, Soda, Tea, Coffee, Salad, Fruit Platter</div>
+          <div class="section-subtitle">We provide tap water. You can optionally choose bottled water or additional refreshments.</div>
+
+          <div class="form-grid-2">
+            <div class="choice-group">
+              <label class="choice-label"><input type="checkbox" name="beverageAddons" value="Tea ($1 extra per guest)"> Tea ($1 extra per guest)</label>
+              <label class="choice-label"><input type="checkbox" name="beverageAddons" value="Coffee ($1 extra per guest)"> Coffee ($1 extra per guest)</label>
+              <label class="choice-label"><input type="checkbox" name="beverageAddons" value="Mango Olive Salad ($1.50 extra per guest)"> Mango Olive Salad ($1.50 extra per guest)</label>
+            </div>
+            <div class="choice-group">
+              <label class="choice-label"><input type="checkbox" name="beverageAddons" value="Fruit Platter ($1.50 extra per guest)"> Fruit Platter ($1.50 extra per guest)</label>
+              <label class="choice-label"><input type="checkbox" name="beverageAddons" value="Soda ($1 extra per guest)"> Soda ($1 extra per guest)</label>
+              <label class="choice-label"><input type="checkbox" name="beverageAddons" value="Water Bottles (50 cents extra per guest)"> Water Bottles (50 cents extra per guest)</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: Tech Packages, Linens & Sashes -->
+        <div class="section-block">
+          <div class="section-title">5. Tech Packages & Decor Options</div>
+          
+          <div class="form-group">
+            <label>Basic Tech Package - $50 (Boom Box & Wireless Speaker)*</label>
+            <span class="input-hint">Includes Boom Box, Wireless Mikes (2), Projector</span>
+            <div class="choice-row">
+              <label class="choice-label"><input type="radio" name="basicTech" value="No" checked> No</label>
+              <label class="choice-label"><input type="radio" name="basicTech" value="Yes"> Yes</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Elaborate Tech Package - $150 (High Bass Speakers, Wireless Mikes, Projectors, TVs)*</label>
+            <span class="input-hint">Includes QSC KS118 3600W 18" Subwoofer and mounted Speakers, Wireless Mikes, Projector, 5 x Samsung 65 inch TVs</span>
+            <div class="choice-row">
+              <label class="choice-label"><input type="radio" name="elaborateTech" value="No" checked> No</label>
+              <label class="choice-label"><input type="radio" name="elaborateTech" value="Yes"> Yes</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Do you need WHITE Table Cloths? ($5 per table cloth)*[cite: 1]</label>
+            <div class="choice-row">
+              <label class="choice-label"><input type="radio" name="tableClothsReq" value="No" checked> No</label>
+              <label class="choice-label"><input type="radio" name="tableClothsReq" value="Yes"> Yes</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Sash Color for Chairs ($1 per guest - choose max of two colors)[cite: 1]</label>
+            <div class="form-grid-3">
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Gold" onchange="limitSashes(2)"> Gold</label>
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Maroon/Burgundy" onchange="limitSashes(2)"> Maroon/Burgundy</label>
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Baby Pink" onchange="limitSashes(2)"> Baby Pink</label>
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Royal Pink (Dark)" onchange="limitSashes(2)"> Royal Pink (Dark)</label>
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Royal Blue (Dark)" onchange="limitSashes(2)"> Royal Blue (Dark)</label>
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Green" onchange="limitSashes(2)"> Green</label>
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Baby Blue" onchange="limitSashes(2)"> Baby Blue</label>
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Royal Red (Dark)" onchange="limitSashes(2)"> Royal Red (Dark)</label>
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Chocolate/Brown" onchange="limitSashes(2)"> Chocolate/Brown</label>
+              <label class="choice-label"><input type="checkbox" name="sashColors" value="Serenity Blue/Purple" onchange="limitSashes(2)"> Serenity Blue/Purple</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 6: Liquor, Decorator & Serving Timings -->
+        <div class="section-block">
+          <div class="section-title">6. Event Schedule & Logistics</div>
+
+          <div class="form-group">
+            <label>Do you plan to get your own liquor? (Corkage fee of $2 per adult guest or $100 higher of the two will be applied)*</label>
+            <div class="choice-row">
+              <label class="choice-label"><input type="radio" name="ownLiquor" value="No" checked> No</label>
+              <label class="choice-label"><input type="radio" name="ownLiquor" value="Yes"> Yes</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Are you using decorator(s) for your event?*</label>
+            <div class="choice-row">
+              <label class="choice-label"><input type="radio" name="usingDecorators" value="No" checked> No</label>
+              <label class="choice-label"><input type="radio" name="usingDecorators" value="Yes"> Yes</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="servingTimes">Please provide details about by what times you expect Appetizers, Main Course and Desserts to be served?*</label>
+            <textarea id="servingTimes" name="servingTimes" rows="3" required placeholder="You can choose to say all of them to be served at the same time @ HH:MM or have welcome drink and appetizers to be served first @ HH:MM and the rest to follow @ HH:MM"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="specialRequests">Special Requests agreed with owners (Suraj or Venkat)*</label>
+            <textarea id="specialRequests" name="specialRequests" rows="3" required placeholder="If there are any additional agreements or T&C deviations agreed with owners (Suraj or Venkat), please list them here. No verbal agreements should be considered final unless in an email or in this form"></textarea>
+          </div>
+        </div>
+
+        <!-- Section 7: Terms & Conditions and Acknowledgments -->
+        <div class="section-block">
+          <div class="section-title">Terms & Conditions</div>
+
+          <div class="form-group">
+            <label class="choice-label" style="font-weight: 600; color: #111827;">
+              <input type="checkbox" id="cleaningChargeAck" name="cleaningChargeAck" required>
+              I acknowledge $150 cleaning charges and 15% service charge will be added to the final bill *
+            </label>
+          </div>
+
+          <div class="terms-box">
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Please note that Party Bookings are non refundable and non transferable</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Minimum of 50 adult guests will be charged for premium party slots: (Saturday Lunch/Dinner & Sunday Lunch). Minimum of 30 adults will be charged for remaining slots.</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Please plan to pay the full invoice a week before the event date. You'll get back the $250 advance (minus any incidentals) after the event concludes</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> We charge based on guest count provided to us. If there are more guests than the number submitted to us, we will charge extra. If less guests show up than the counts provided to us, we still charge for guest count provided to us. It's because we would have procured, prepped and cooked for as many guests provided to us during menu submission process</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Please send us revised guest counts at least a day before the event date. If more guests show up than the guest counts provided to us, refills could be delayed. We will do our best to catch-up</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> We only charge for the food. We have no additional charges for Banquet Hall. Our services during the event are limited to timely refilling of your food choices</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> If you need additional people to service your event, we can hire them at $150 per person per 3 hours</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> We charge $5 for each table cloth[cite: 1]</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Hall must be vacated by 3 PM for Lunch or by 10 PM for Dinner. $50 for every extra 30 mins will be added to final bill</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Last food refill: Welcome drink, Starters, Salads 12.30 PM for Lunch & 8 PM for Dinner and for the remaining items, 1.30 pm for Lunch and 9 pm for Dinner</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Please do NOT nail, staple, tack, wheat-paste, double sided or duct tape to walls (Scotch tape or removable tape/poster tapes are advised)</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> If you choose to get your own alcohol, Corkage Fee of $2/Adult Guest or $100 (higher of the two) will be added to final bill</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Please ensure all party arrangement requests outside of these T&Cs are in the form of email to igrill.us@gmail.com[cite: 1]</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Children must be supervised at all times and children must not be left unattended at any time</label>
+            <label class="terms-item"><input type="checkbox" class="tc-item" required> Party hall food cannot be taken home and togo boxes will not be provided (Sorry!!)</label>
+            
+            <label class="terms-item check-all-label">
+              <input type="checkbox" id="checkAllTC" onchange="toggleAllTC(this)"> Check All Terms & Conditions
+            </label>
+          </div>
+
+          <div class="form-group" style="margin-top: 1.5rem;">
+            <label class="choice-label" style="font-weight: 700; color: #111827;">
+              <input type="checkbox" id="finalAck" name="finalAck" required>
+              Acknowledgment: I acknowledge to adhere to all of the above terms and conditions *
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Banquet Menu Selection</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleOtherDrink(show) {
+      const container = document.getElementById("otherDrinkWrapper");
+      const input = document.getElementById("otherDrinkName");
+      if (show) {
+        container.style.display = "block";
+        input.required = true;
+        input.focus();
+      } else {
+        container.style.display = "none";
+        input.required = false;
+        input.value = "";
+      }
+    }
+
+    const STANDARD_MENU_HTML = `
+      <option value="">-- Choose Item --</option>
+      <optgroup label="Appetizers - Vegetarian">
+        <option value="Vegetable Samosa">Vegetable Samosa</option>
+        <option value="Samosa Chaat">Samosa Chaat</option>
+        <option value="Papdi Chaat">Papdi Chaat</option>
+        <option value="Paav Bhaji">Paav Bhaji</option>
+        <option value="Paneer 65">Paneer 65</option>
+        <option value="Paneer Tikka">Paneer Tikka</option>
+        <option value="Chilli Paneer">Chilli Paneer</option>
+        <option value="Gobi 65">Gobi 65</option>
+        <option value="Gobi Manchurian">Gobi Manchurian</option>
+        <option value="Crispy Corn Pepper Fry">Crispy Corn Pepper Fry</option>
+        <option value="Cut Mirchi">Cut Mirchi</option>
+        <option value="Hara Bhara Kabab">Hara Bhara Kabab</option>
+      </optgroup>
+      <optgroup label="Appetizers - Chicken (Halal)">
+        <option value="Chicken 65">Chicken 65</option>
+        <option value="Chili Chicken">Chili Chicken</option>
+        <option value="Chicken Manchurian">Chicken Manchurian</option>
+        <option value="Chicken Vepudu">Chicken Vepudu</option>
+        <option value="Chicken Pepper Fry">Chicken Pepper Fry</option>
+        <option value="Garlic Chicken">Garlic Chicken</option>
+        <option value="Chicken Tikka Boti">Chicken Tikka Boti</option>
+        <option value="Lasooni Murgh Tikka">Lasooni Murgh Tikka</option>
+        <option value="Malai Murgh Tikka">Malai Murgh Tikka</option>
+        <option value="Murgh Chuttneywala">Murgh Chuttneywala</option>
+        <option value="Hariyali Murgh Tikka">Hariyali Murgh Tikka</option>
+        <option value="Murgh Tikka">Murgh Tikka</option>
+        <option value="Saffron Murgh Tikka">Saffron Murgh Tikka</option>
+        <option value="Red Chili Chicken Kebab">Red Chili Chicken Kebab</option>
+        <option value="Murgh Tangdi Kabab">Murgh Tangdi Kabab</option>
+        <option value="Chicken Seekh Kabab">Chicken Seekh Kabab</option>
+        <option value="Chicken Wings">Chicken Wings</option>
+        <option value="Chicken Lollipop">Chicken Lollipop</option>
+      </optgroup>
+      <optgroup label="Appetizers - Premium Mutton & Seafood (*)">
+        <option value="Mutton Sukka Kabab *">Mutton Sukka Kabab *</option>
+        <option value="Chili Shrimp *">Chili Shrimp *</option>
+        <option value="Prawn 65 *">Prawn 65 *</option>
+        <option value="Apollo Fish *">Apollo Fish *</option>
+        <option value="Fish Fry / Chatpata Fish *">Fish Fry / Chatpata Fish *</option>
+        <option value="Fish Finger *">Fish Finger *</option>
+        <option value="Tawa Fish *">Tawa Fish *</option>
+      </optgroup>
+      <optgroup label="Curries & Entrees - Vegetarian & Paneer">
+        <option value="Paneer Butter Masala">Paneer Butter Masala</option>
+        <option value="Paneer Tikka Masala">Paneer Tikka Masala</option>
+        <option value="Palak Paneer">Palak Paneer</option>
+        <option value="Kadai Paneer">Kadai Paneer</option>
+        <option value="Malai Kofta">Malai Kofta</option>
+        <option value="Navratan Korma">Navratan Korma</option>
+        <option value="Chole Masala">Chole Masala</option>
+        <option value="Bhindi Masala">Bhindi Masala</option>
+        <option value="Dal Makhani">Dal Makhani</option>
+        <option value="Dal Fry">Dal Fry</option>
+        <option value="Yellow Dal Tadka / Peeli Dal">Yellow Dal Tadka / Peeli Dal</option>
+        <option value="Katti Dal">Katti Dal</option>
+        <option value="Sambar">Sambar</option>
+      </optgroup>
+      <optgroup label="Curries & Entrees - Chicken & Egg (Halal)">
+        <option value="Butter Chicken">Butter Chicken</option>
+        <option value="Chicken Tikka Masala">Chicken Tikka Masala</option>
+        <option value="Chicken Chettinad Curry">Chicken Chettinad Curry</option>
+        <option value="Andhra Chicken Curry">Andhra Chicken Curry</option>
+        <option value="Nizami Chicken Curry">Nizami Chicken Curry</option>
+        <option value="Pepper Chicken Masala">Pepper Chicken Masala</option>
+        <option value="Hyderabadi Chicken Curry (Spicy)">Hyderabadi Chicken Curry (Spicy)</option>
+        <option value="Chicken Korma">Chicken Korma</option>
+        <option value="Chicken Vindaloo">Chicken Vindaloo</option>
+        <option value="Kadai Chicken">Kadai Chicken</option>
+        <option value="Egg Masala Curry">Egg Masala Curry</option>
+      </optgroup>
+      <optgroup label="Curries & Entrees - Premium Goat, Mutton & Seafood (*)">
+        <option value="Goat Curry / Karahi *">Goat Curry / Karahi *</option>
+        <option value="Goat Sukka *">Goat Sukka *</option>
+        <option value="Goat Vindaloo *">Goat Vindaloo *</option>
+        <option value="Goat Korma *">Goat Korma *</option>
+        <option value="Nilgiri Goat Korma *">Nilgiri Goat Korma *</option>
+        <option value="Goat Kaliya *">Goat Kaliya *</option>
+        <option value="Goat Dalcha *">Goat Dalcha *</option>
+        <option value="Goat Laal Maas *">Goat Laal Maas *</option>
+        <option value="Prawn Masala *">Prawn Masala *</option>
+        <option value="Prawn Pepper Masala *">Prawn Pepper Masala *</option>
+        <option value="Madras Fish Curry *">Madras Fish Curry *</option>
+        <option value="Malabar Fish Curry *">Malabar Fish Curry *</option>
+        <option value="Fish Moilee *">Fish Moilee *</option>
+        <option value="Chepala Pulusu *">Chepala Pulusu *</option>
+      </optgroup>
+      <optgroup label="Biryanis - Standard (Chicken / Veg / Paneer / Egg)">
+        <option value="Hyderabadi Chicken Dum Biryani">Hyderabadi Chicken Dum Biryani</option>
+        <option value="Veg Dum Biryani">Veg Dum Biryani</option>
+        <option value="Paneer Dum Biryani">Paneer Dum Biryani</option>
+        <option value="Egg Dum Biryani">Egg Dum Biryani</option>
+      </optgroup>
+      <optgroup label="Biryanis - Premium (*)">
+        <option value="Goat Dum Biryani *">Goat Dum Biryani *</option>
+        <option value="Mutton Keema Biryani *">Mutton Keema Biryani *</option>
+      </optgroup>
+      <optgroup label="Desserts">
+        <option value="Warm Gulab Jamun">Warm Gulab Jamun</option>
+        <option value="Rasmalai">Rasmalai</option>
+        <option value="Gajar Ka Halwa">Gajar Ka Halwa</option>
+        <option value="Double Ka Meetha">Double Ka Meetha</option>
+        <option value="Rice Kheer">Rice Kheer</option>
+        <option value="Mango Kulfi">Mango Kulfi</option>
+        <option value="Qubani Ka Meetha">Qubani Ka Meetha</option>
+      </optgroup>
+    `;
+
+    const EXTRA_MENU_HTML = `
+      <option value="">-- None --</option>
+      <optgroup label="Extra Vegetarian ($2.00 / guest)">
+        <option value="Extra: Vegetable Samosa (+$2.00)">Vegetable Samosa (+$2.00)</option>
+        <option value="Extra: Samosa Chaat (+$2.00)">Samosa Chaat (+$2.00)</option>
+        <option value="Extra: Papdi Chaat (+$2.00)">Papdi Chaat (+$2.00)</option>
+        <option value="Extra: Paav Bhaji (+$2.00)">Paav Bhaji (+$2.00)</option>
+        <option value="Extra: Gobi 65 (+$2.00)">Gobi 65 (+$2.00)</option>
+        <option value="Extra: Gobi Manchurian (+$2.00)">Gobi Manchurian (+$2.00)</option>
+        <option value="Extra: Crispy Corn Pepper Fry (+$2.00)">Crispy Corn Pepper Fry (+$2.00)</option>
+        <option value="Extra: Cut Mirchi (+$2.00)">Cut Mirchi (+$2.00)</option>
+        <option value="Extra: Hara Bhara Kabab (+$2.00)">Hara Bhara Kabab (+$2.00)</option>
+        <option value="Extra: Dal Makhani (+$2.00)">Dal Makhani (+$2.00)</option>
+        <option value="Extra: Dal Fry (+$2.00)">Dal Fry (+$2.00)</option>
+        <option value="Extra: Yellow Dal Tadka (+$2.00)">Yellow Dal Tadka (+$2.00)</option>
+        <option value="Extra: Chole Masala (+$2.00)">Chole Masala (+$2.00)</option>
+        <option value="Extra: Bhindi Masala (+$2.00)">Bhindi Masala (+$2.00)</option>
+        <option value="Extra: Navratan Korma (+$2.00)">Navratan Korma (+$2.00)</option>
+        <option value="Extra: Veg Dum Biryani (+$2.00)">Veg Dum Biryani (+$2.00)</option>
+        <option value="Extra: Warm Gulab Jamun (+$2.00)">Warm Gulab Jamun (+$2.00)</option>
+        <option value="Extra: Rasmalai (+$2.00)">Rasmalai (+$2.00)</option>
+        <option value="Extra: Gajar Ka Halwa (+$2.00)">Gajar Ka Halwa (+$2.00)</option>
+        <option value="Extra: Double Ka Meetha (+$2.00)">Double Ka Meetha (+$2.00)</option>
+        <option value="Extra: Rice Kheer (+$2.00)">Rice Kheer (+$2.00)</option>
+      </optgroup>
+      <optgroup label="Extra Paneer, Chicken & Egg ($2.50 / guest)">
+        <option value="Extra: Paneer 65 (+$2.50)">Paneer 65 (+$2.50)</option>
+        <option value="Extra: Paneer Tikka (+$2.50)">Paneer Tikka (+$2.50)</option>
+        <option value="Extra: Chilli Paneer (+$2.50)">Chilli Paneer (+$2.50)</option>
+        <option value="Extra: Paneer Butter Masala (+$2.50)">Paneer Butter Masala (+$2.50)</option>
+        <option value="Extra: Paneer Tikka Masala (+$2.50)">Paneer Tikka Masala (+$2.50)</option>
+        <option value="Extra: Palak Paneer (+$2.50)">Palak Paneer (+$2.50)</option>
+        <option value="Extra: Kadai Paneer (+$2.50)">Kadai Paneer (+$2.50)</option>
+        <option value="Extra: Malai Kofta (+$2.50)">Malai Kofta (+$2.50)</option>
+        <option value="Extra: Paneer Dum Biryani (+$2.50)">Paneer Dum Biryani (+$2.50)</option>
+        <option value="Extra: Chicken 65 (+$2.50)">Chicken 65 (+$2.50)</option>
+        <option value="Extra: Chili Chicken (+$2.50)">Chili Chicken (+$2.50)</option>
+        <option value="Extra: Chicken Manchurian (+$2.50)">Chicken Manchurian (+$2.50)</option>
+        <option value="Extra: Chicken Tikka Boti (+$2.50)">Chicken Tikka Boti (+$2.50)</option>
+        <option value="Extra: Chicken Seekh Kabab (+$2.50)">Chicken Seekh Kabab (+$2.50)</option>
+        <option value="Extra: Chicken Lollipop (+$2.50)">Chicken Lollipop (+$2.50)</option>
+        <option value="Extra: Butter Chicken (+$2.50)">Butter Chicken (+$2.50)</option>
+        <option value="Extra: Chicken Tikka Masala (+$2.50)">Chicken Tikka Masala (+$2.50)</option>
+        <option value="Extra: Chicken Chettinad (+$2.50)">Chicken Chettinad (+$2.50)</option>
+        <option value="Extra: Kadai Chicken (+$2.50)">Kadai Chicken (+$2.50)</option>
+        <option value="Extra: Egg Masala Curry (+$2.50)">Egg Masala Curry (+$2.50)</option>
+        <option value="Extra: Hyderabadi Chicken Dum Biryani (+$2.50)">Chicken Dum Biryani (+$2.50)</option>
+        <option value="Extra: Egg Dum Biryani (+$2.50)">Egg Dum Biryani (+$2.50)</option>
+      </optgroup>
+      <optgroup label="Extra Lamb, Goat, Mutton & Seafood ($3.00 / guest)">
+        <option value="Extra: Mutton Sukka Kabab (+$3.00)">Mutton Sukka Kabab (+$3.00)</option>
+        <option value="Extra: Chili Shrimp (+$3.00)">Chili Shrimp (+$3.00)</option>
+        <option value="Extra: Prawn 65 (+$3.00)">Prawn 65 (+$3.00)</option>
+        <option value="Extra: Apollo Fish (+$3.00)">Apollo Fish (+$3.00)</option>
+        <option value="Extra: Fish Fry / Chatpata Fish (+$3.00)">Fish Fry / Chatpata Fish (+$3.00)</option>
+        <option value="Extra: Goat Curry / Karahi (+$3.00)">Goat Curry / Karahi (+$3.00)</option>
+        <option value="Extra: Goat Sukka (+$3.00)">Goat Sukka (+$3.00)</option>
+        <option value="Extra: Goat Korma (+$3.00)">Goat Korma (+$3.00)</option>
+        <option value="Extra: Prawn Masala (+$3.00)">Prawn Masala (+$3.00)</option>
+        <option value="Extra: Malabar Fish Curry (+$3.00)">Malabar Fish Curry (+$3.00)</option>
+        <option value="Extra: Goat Dum Biryani (+$3.00)">Goat Dum Biryani (+$3.00)</option>
+        <option value="Extra: Mutton Keema Biryani (+$3.00)">Mutton Keema Biryani (+$3.00)</option>
+      </optgroup>
+    `;
+
+    document.querySelectorAll('.standard-menu-select').forEach(sel => {
+      sel.innerHTML = STANDARD_MENU_HTML;
+    });
+
+    document.querySelectorAll('.extra-menu-select').forEach(sel => {
+      sel.innerHTML = EXTRA_MENU_HTML;
+    });
+
+    function limitSashes(max) {
+      const checked = document.querySelectorAll('input[name="sashColors"]:checked');
+      if (checked.length > max) {
+        alert(`You can select a maximum of ${max} sash colors.`);
+        event.target.checked = false;
+      }
+    }
+
+    function toggleAllTC(source) {
+      document.querySelectorAll('.tc-item').forEach(box => {
+        box.checked = source.checked;
+      });
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const itemInputs = ['item01', 'item02', 'item03', 'item04', 'item05', 'item06'];
+      let premiumCount = 0;
+
+      for (const id of itemInputs) {
+        const val = document.getElementById(id).value;
+        if (val.includes('*')) premiumCount++;
+      }
+
+      if (premiumCount > 3) {
+        alert("You have selected " + premiumCount + " premium items (marked with *). The package allows a maximum of 3 premium items.");
+        return;
+      }
+
+      const tcChecked = Array.from(document.querySelectorAll('.tc-item')).every(box => box.checked);
+      if (!tcChecked) {
+        alert("Please review and check all terms & conditions before submitting.");
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting Menu Selection...";
+
+      setTimeout(() => {
+        alert("Thank you! Your banquet menu selections, add-ons, and logistics details have been successfully recorded.");
+        document.getElementById('banquet-form').reset();
+        toggleOtherDrink(false);
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Banquet Menu Selection";
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
