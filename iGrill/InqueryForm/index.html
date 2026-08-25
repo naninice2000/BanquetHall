@@ -494,6 +494,15 @@
       display: none;
     }
 
+    .site-footer {
+      margin-top: 2rem;
+      padding: 1.25rem 1rem 0;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
     /* Mobile Adaptations */
     @media (max-width: 650px) {
       body {
@@ -576,6 +585,10 @@
       .selection-banner {
         font-size: 0.88rem;
         padding: 0.75rem 0.9rem;
+      }
+
+      .site-footer {
+        margin-top: 1.5rem;
       }
     }
   </style>
@@ -703,6 +716,10 @@
         <button type="submit" class="btn-submit" id="submit-btn">Submit Reservation Inquiry</button>
       </form>
     </div>
+
+    <footer class="site-footer">
+      <p>Powered by Lightning Ventures LLC</p>
+    </footer>
   </div>
 
   <script>
