@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Client-side PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
   <style>
     :root {
       --primary: #c59d5f;
@@ -173,6 +177,7 @@
 
     .form-group {
       margin-bottom: 1.25rem;
+      position: relative;
     }
 
     .form-group label {
@@ -208,12 +213,6 @@
       transition: border-color 0.2s, background 0.2s;
     }
 
-    .form-group select optgroup {
-      font-weight: 700;
-      color: var(--primary);
-      background: #ffffff;
-    }
-
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
@@ -221,6 +220,79 @@
       background: #ffffff;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(197, 157, 95, 0.2);
+    }
+
+    /* Typeahead Autocomplete Search Dropdown Styling */
+    .autocomplete-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .autocomplete-input {
+      width: 100%;
+      padding: 0.8rem 2.2rem 0.8rem 1rem !important;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-dark);
+      border-radius: 6px;
+      font-family: var(--font-family);
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+
+    .autocomplete-arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .autocomplete-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      max-height: 250px;
+      overflow-y: auto;
+      background: #ffffff;
+      border: 1px solid var(--primary);
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      z-index: 999;
+      list-style: none;
+    }
+
+    .autocomplete-dropdown.active {
+      display: block;
+    }
+
+    .autocomplete-group {
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: #fdf8f0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(197, 157, 95, 0.2);
+    }
+
+    .autocomplete-item {
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      cursor: pointer;
+      border-bottom: 1px solid #f3f4f6;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .autocomplete-item:hover, .autocomplete-item.highlighted {
+      background: #fdf8f0;
+      color: var(--primary);
+      font-weight: 600;
     }
 
     .choice-group {
@@ -251,16 +323,9 @@
       cursor: pointer;
     }
 
-    /* Custom Input Container for Other Welcome Drink */
     .other-drink-container {
       margin-top: 0.75rem;
       display: none;
-      animation: fadeIn 0.2s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-4px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     .terms-box {
@@ -333,12 +398,10 @@
       <span class="header-badge">Banquet Hall Catering</span>
       <h1>Banquet Hall Menu Selection</h1>
       <div class="title-divider"></div>
-      <p>Select your dishes, optional add-ons, AV tech packages, and confirm event arrangements.</p>
+      <p>Select your dishes, add-ons, tech packages, and confirm event arrangements.</p>
     </div>
 
     <div class="form-card">
-      
-      <!-- Package Info Box -->
       <div class="package-summary-card">
         <h3>Special Package - $20/Guest (9 items)</h3>
         <ul>
@@ -348,8 +411,8 @@
           <li>Naan (plain/butter)</li>
         </ul>
         <div class="pricing-note">
-          <strong>Included in Base:</strong> All Veg, Paneer, Chicken, and Egg options.<br>
-          <strong>Extra Items Pricing (Beyond 6 items):</strong> $2 for Veg | $2.50 for Paneer, Chicken, or Egg | $3 for Lamb, Goat, Mutton, Fish, and Shrimp/Prawn.<br>
+          <strong>Included in Base:</strong> All Veg, Paneer*, Chicken*, and Egg* options.<br>
+          <strong>Extra Items Pricing (Beyond 6 items):</strong> $2 for Veg | $2.50 for Paneer*, Chicken*, or Egg* | $3 for Lamb*, Goat ($3 extra)*, Mutton ($3 extra)*, Fish*, and Shrimp/Prawn*.<br>
           <em>(Minimum charges apply: $75 for Veg, $100 for Paneer/Kofta/Pani Puri/Pav Bhaji/Chicken, $150 for Goat/Fish/Shrimp)</em>
         </div>
       </div>
@@ -399,13 +462,13 @@
           </div>
         </div>
 
-        <!-- Section 2: Welcome Drink & 6 Core Items -->
+        <!-- Section 2: Welcome Drink & 6 Core Items (Type-to-Search Autocomplete) -->
         <div class="section-block">
           <div class="section-title">
             <span>2. Welcome Drink & Main Menu Items</span>
             <span class="limit-badge">Limit to 3 Premium Items (*)</span>
           </div>
-          <div class="section-subtitle">Select your welcome drink and 6 primary dishes included in the package.</div>
+          <div class="section-subtitle">Select your welcome drink and 6 primary dishes. Type to filter or click to browse options.</div>
 
           <div class="form-group">
             <label>Welcome Drink *</label>
@@ -419,8 +482,6 @@
               <label class="choice-label"><input type="radio" name="welcomeDrink" value="Coffee" onchange="toggleOtherDrink(false)"> Coffee</label>
               <label class="choice-label"><input type="radio" name="welcomeDrink" value="Other" id="otherDrinkRadio" onchange="toggleOtherDrink(true)"> Other</label>
             </div>
-
-            <!-- Dynamic Input Box for Other Welcome Drink -->
             <div class="other-drink-container" id="otherDrinkWrapper">
               <input type="text" id="otherDrinkName" name="otherDrinkName" placeholder="Specify custom welcome drink name" />
             </div>
@@ -428,28 +489,57 @@
 
           <div class="form-grid-2">
             <div class="form-group">
-              <label for="item01">Item 01 (Limit to 3 premium items, marked with *)*</label>
-              <select id="item01" name="item01" class="standard-menu-select" required></select>
+              <label for="item01">Item 01 (Limit to 3 items marked with *)*</label>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="item01" name="item01" class="autocomplete-input standard-item" placeholder="Type or search item..." required autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="item01-dropdown"></ul>
+              </div>
             </div>
+
             <div class="form-group">
-              <label for="item02">Item 02 (Limit to 3 premium items, marked with *)*</label>
-              <select id="item02" name="item02" class="standard-menu-select" required></select>
+              <label for="item02">Item 02 (Limit to 3 items marked with *)*</label>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="item02" name="item02" class="autocomplete-input standard-item" placeholder="Type or search item..." required autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="item02-dropdown"></ul>
+              </div>
             </div>
+
             <div class="form-group">
-              <label for="item03">Item 03 (Limit to 3 premium items, marked with *)*</label>
-              <select id="item03" name="item03" class="standard-menu-select" required></select>
+              <label for="item03">Item 03 (Limit to 3 items marked with *)*</label>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="item03" name="item03" class="autocomplete-input standard-item" placeholder="Type or search item..." required autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="item03-dropdown"></ul>
+              </div>
             </div>
+
             <div class="form-group">
-              <label for="item04">Item 04 (Limit to 3 premium items, marked with *)*</label>
-              <select id="item04" name="item04" class="standard-menu-select" required></select>
+              <label for="item04">Item 04 (Limit to 3 items marked with *)*</label>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="item04" name="item04" class="autocomplete-input standard-item" placeholder="Type or search item..." required autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="item04-dropdown"></ul>
+              </div>
             </div>
+
             <div class="form-group">
-              <label for="item05">Item 05 (Limit to 3 premium items, marked with *)*</label>
-              <select id="item05" name="item05" class="standard-menu-select" required></select>
+              <label for="item05">Item 05 (Limit to 3 items marked with *)*</label>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="item05" name="item05" class="autocomplete-input standard-item" placeholder="Type or search item..." required autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="item05-dropdown"></ul>
+              </div>
             </div>
+
             <div class="form-group">
-              <label for="item06">Item 06 (Limit to 3 premium items, marked with *)*</label>
-              <select id="item06" name="item06" class="standard-menu-select" required></select>
+              <label for="item06">Item 06 (Limit to 3 items marked with *)*</label>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="item06" name="item06" class="autocomplete-input standard-item" placeholder="Type or search item..." required autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="item06-dropdown"></ul>
+              </div>
             </div>
           </div>
 
@@ -473,31 +563,55 @@
           </div>
         </div>
 
-        <!-- Section 3: Extra Items (Optional) -->
+        <!-- Section 3: Extra Items (Type-to-Search Autocomplete) -->
         <div class="section-block">
           <div class="section-title">3. Optional Extra Items (Add-ons)</div>
-          <div class="section-subtitle">$2 for Veg | $2.50 for Paneer, Chicken, or Egg | $3 for Lamb, Goat, Mutton, Fish, and Shrimp/Prawn</div>
+          <div class="section-subtitle">$2 for Veg | $2.50 for Paneer*, Chicken*, or Egg* | $3 for Lamb*, Goat ($3 extra)*, Mutton ($3 extra)*, Fish*, and Shrimp/Prawn*</div>
 
           <div class="form-grid-2">
             <div class="form-group">
               <label for="extra01">Extra Item 01</label>
-              <select id="extra01" name="extra01" class="extra-menu-select"><option value="">-- None --</option></select>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="extra01" name="extra01" class="autocomplete-input extra-item" placeholder="Type or search extra item..." autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="extra01-dropdown"></ul>
+              </div>
             </div>
+
             <div class="form-group">
               <label for="extra02">Extra Item 02</label>
-              <select id="extra02" name="extra02" class="extra-menu-select"><option value="">-- None --</option></select>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="extra02" name="extra02" class="autocomplete-input extra-item" placeholder="Type or search extra item..." autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="extra02-dropdown"></ul>
+              </div>
             </div>
+
             <div class="form-group">
               <label for="extra03">Extra Item 03</label>
-              <select id="extra03" name="extra03" class="extra-menu-select"><option value="">-- None --</option></select>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="extra03" name="extra03" class="autocomplete-input extra-item" placeholder="Type or search extra item..." autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="extra03-dropdown"></ul>
+              </div>
             </div>
+
             <div class="form-group">
               <label for="extra04">Extra Item 04</label>
-              <select id="extra04" name="extra04" class="extra-menu-select"><option value="">-- None --</option></select>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="extra04" name="extra04" class="autocomplete-input extra-item" placeholder="Type or search extra item..." autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="extra04-dropdown"></ul>
+              </div>
             </div>
+
             <div class="form-group">
               <label for="extra05">Extra Item 05</label>
-              <select id="extra05" name="extra05" class="extra-menu-select"><option value="">-- None --</option></select>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="extra05" name="extra05" class="autocomplete-input extra-item" placeholder="Type or search extra item..." autocomplete="off" />
+                <span class="autocomplete-arrow">▼</span>
+                <ul class="autocomplete-dropdown" id="extra05-dropdown"></ul>
+              </div>
             </div>
           </div>
         </div>
@@ -505,7 +619,7 @@
         <!-- Section 4: Beverage & Non-package Add-ons -->
         <div class="section-block">
           <div class="section-title">4. Water Bottles, Soda, Tea, Coffee, Salad, Fruit Platter</div>
-          <div class="section-subtitle">We provide tap water. You can optionally choose bottled water or additional refreshments.</div>
+          <div class="section-subtitle">We provide tap water. You can optionally choose bottled water or refreshments.</div>
 
           <div class="form-grid-2">
             <div class="choice-group">
@@ -646,6 +760,209 @@
   </div>
 
   <script>
+    const APPS_SCRIPT_MENU_URL = "https://script.google.com/macros/s/AKfycbyxpPJc1t8Fd0XSn2uk5atlk2AOA4VDoiRe8JJymsJUUIV5EZKu6sxWHz5ZUpvCHYfk/exec";
+
+    // Structured menu datasets with * for Paneer & Non-Veg, and ($3 extra) * for Goat/Mutton
+    const STANDARD_MENU_GROUPS = [
+      {
+        group: "Appetizers - Vegetarian",
+        items: [
+          "Vegetable Samosa", "Samosa Chaat", "Papdi Chaat", "Paav Bhaji ($1 extra)", 
+          "Gobi 65", "Gobi Manchurian", "Crispy Corn Pepper Fry", 
+          "Cut Mirchi", "Hara Bhara Kabab"
+        ]
+      },
+      {
+        group: "Appetizers - Paneer (*)",
+        items: [
+          "Paneer 65 *", "Ajwine Paneer Tikka ($1 extra) *", "Chilli Paneer *"
+        ]
+      },
+      {
+        group: "Appetizers - Chicken (*)",
+        items: [
+          "Chicken 65 *", "Chili Chicken *", "Chicken Manchurian *", "Chicken Vepudu *", "Chicken Pepper Fry *", 
+          "Garlic Chicken *", "Chicken Tikka Boti ($1 extra) *", "Lasooni Murgh Tikka ($1 extra) *", "Malai Murgh Tikka ($1 extra) *", 
+          "Murgh Chuttneywala ($1 extra) *", "Hariyali Murgh Tikka *", "Murgh Tikka ($1 extra) *", "Saffron Murgh Tikka *($1 extra) *" , 
+          "Red Chili Chicken Kebab ($1 extra) *", "Murgh Tangdi Kabab ($1 extra) *", "Chicken Seekh Kabab ($1 extra) *", "Chicken Wings ($1 extra) *", "Chicken Lollipop *"
+        ]
+      },
+      {
+        group: "Appetizers - Mutton & Seafood (*)",
+        items: [
+          "Mutton Sukka Kabab ($3 extra) *", "Chili Shrimp ($3 extra) *", "Prawn 65 ($3 extra) *", "Apollo Fish *", 
+          "Fish Fry / Chatpata Fish ($3 extra) *", "Fish Finger *", "Tawa Fish *"
+        ]
+      },
+      {
+        group: "Curries & Entrees - Vegetarian",
+        items: [
+          "Dal Makhani", "Dal Fry", "Yellow Dal Tadka / Peeli Dal", "Katti Dal", 
+          "Sambar", "Chole Masala", "Bhindi Masala", "Navratan Korma"
+        ]
+      },
+      {
+        group: "Curries & Entrees - Paneer (*)",
+        items: [
+          "Paneer Butter Masala *", "Paneer Tikka Masala *", "Palak Paneer *", 
+          "Kadai Paneer *", "Malai Kofta *"
+        ]
+      },
+      {
+        group: "Curries & Entrees - Chicken & Egg (*)",
+        items: [
+          "Butter Chicken *", "Chicken Tikka Masala *", "Chicken Chettinad Curry *", "Andhra Chicken Curry *", 
+          "Nizami Chicken Curry *", "Pepper Chicken Masala *", "Hyderabadi Chicken Curry (Spicy) *", 
+          "Chicken Korma *", "Chicken Vindaloo *", "Kadai Chicken *", "Egg Masala Curry *"
+        ]
+      },
+      {
+        group: "Curries & Entrees - Goat, Mutton & Seafood (*)",
+        items: [
+          "Goat Curry / Karahi ($3 extra) *", "Goat Sukka ($3 extra) *", "Goat Vindaloo ($3 extra) *", "Goat Korma ($3 extra) *", 
+          "Nilgiri Goat Korma ($3 extra) *", "Goat Kaliya ($3 extra) *", "Goat Dalcha ($3 extra) *", "Goat Laal Maas ($3 extra) *", 
+          "Prawn Masala ($3 extra) *", "Prawn Pepper Masala ($3 extra) *", "Madras Fish Curry ($3 extra) *", "Malabar Fish Curry ($3 extra) *", 
+          "Fish Moilee ($3 extra) *", "Chepala Pulusu ($3 extra) *"
+        ]
+      },
+      {
+        group: "Biryanis - Standard",
+        items: [
+          "Veg Dum Biryani", "Paneer Dum Biryani *", "Hyderabadi Chicken Dum Biryani *", "Egg Dum Biryani *"
+        ]
+      },
+      {
+        group: "Biryanis - Goat & Mutton (*)",
+        items: [
+          "Goat Dum Biryani ($3 extra) *", "Mutton Keema Biryani ($3 extra) *"
+        ]
+      },
+      {
+        group: "Desserts",
+        items: [
+          "Warm Gulab Jamun", "Rasmalai", "Gajar Ka Halwa", "Double Ka Meetha", "Rice Kheer", "Mango Kulfi", "Qubani Ka Meetha"
+        ]
+      }
+    ];
+
+    const EXTRA_MENU_GROUPS = [
+      {
+        group: "Extra Vegetarian ($2.00 / guest)",
+        items: [
+          "Extra: Vegetable Samosa (+$2.00)", "Extra: Samosa Chaat (+$2.00)", "Extra: Papdi Chaat (+$2.00)", 
+          "Extra: Paav Bhaji (+$2.00)", "Extra: Gobi 65 (+$2.00)", "Extra: Gobi Manchurian (+$2.00)", 
+          "Extra: Crispy Corn Pepper Fry (+$2.00)", "Extra: Cut Mirchi (+$2.00)", "Extra: Hara Bhara Kabab (+$2.00)", 
+          "Extra: Dal Makhani (+$2.00)", "Extra: Dal Fry (+$2.00)", "Extra: Yellow Dal Tadka (+$2.00)", 
+          "Extra: Chole Masala (+$2.00)", "Extra: Bhindi Masala (+$2.00)", "Extra: Navratan Korma (+$2.00)", 
+          "Extra: Veg Dum Biryani (+$2.00)", "Extra: Warm Gulab Jamun (+$2.00)", "Extra: Rasmalai (+$2.00)", 
+          "Extra: Gajar Ka Halwa (+$2.00)", "Extra: Double Ka Meetha (+$2.00)", "Extra: Rice Kheer (+$2.00)"
+        ]
+      },
+      {
+        group: "Extra Paneer, Chicken & Egg ($2.50 / guest)",
+        items: [
+          "Extra: Paneer 65 (+$2.50)", "Extra: Paneer Tikka (+$2.50)", "Extra: Chilli Paneer (+$2.50)", 
+          "Extra: Paneer Butter Masala (+$2.50)", "Extra: Paneer Tikka Masala (+$2.50)", "Extra: Palak Paneer (+$2.50)", 
+          "Extra: Kadai Paneer (+$2.50)", "Extra: Malai Kofta (+$2.50)", "Extra: Paneer Dum Biryani (+$2.50)", 
+          "Extra: Chicken 65 (+$2.50)", "Extra: Chili Chicken (+$2.50)", "Extra: Chicken Manchurian (+$2.50)", 
+          "Extra: Chicken Tikka Boti (+$2.50)", "Extra: Chicken Seekh Kabab (+$2.50)", "Extra: Chicken Lollipop (+$2.50)", 
+          "Extra: Butter Chicken (+$2.50)", "Extra: Chicken Tikka Masala (+$2.50)", "Extra: Chicken Chettinad (+$2.50)", 
+          "Extra: Kadai Chicken (+$2.50)", "Extra: Egg Masala Curry (+$2.50)", "Extra: Hyderabadi Chicken Dum Biryani (+$2.50)", 
+          "Extra: Egg Dum Biryani (+$2.50)"
+        ]
+      },
+      {
+        group: "Extra Lamb, Goat, Mutton & Seafood ($3.00 / guest)",
+        items: [
+          "Extra: Mutton Sukka Kabab ($3 extra) (+$3.00)", "Extra: Chili Shrimp (+$3.00)", "Extra: Prawn 65 (+$3.00)", 
+          "Extra: Apollo Fish (+$3.00)", "Extra: Fish Fry / Chatpata Fish (+$3.00)", "Extra: Goat Curry / Karahi ($3 extra) (+$3.00)", 
+          "Extra: Goat Sukka ($3 extra) (+$3.00)", "Extra: Goat Korma ($3 extra) (+$3.00)", "Extra: Prawn Masala (+$3.00)", 
+          "Extra: Malabar Fish Curry (+$3.00)", "Extra: Goat Dum Biryani ($3 extra) (+$3.00)", "Extra: Mutton Keema Biryani ($3 extra) (+$3.00)"
+        ]
+      }
+    ];
+
+    // Setup Typeahead Autocomplete Search Dropdowns
+    function setupTypeahead(inputId, dropdownId, groupsData, allowNone = false) {
+      const input = document.getElementById(inputId);
+      const dropdown = document.getElementById(dropdownId);
+
+      function renderList(filterQuery = "") {
+        dropdown.innerHTML = "";
+        const q = filterQuery.trim().toLowerCase();
+        let totalMatches = 0;
+
+        if (allowNone && (!q || "none".includes(q))) {
+          const noneLi = document.createElement("li");
+          noneLi.className = "autocomplete-item";
+          noneLi.textContent = "-- None --";
+          noneLi.addEventListener("click", () => {
+            input.value = "";
+            dropdown.classList.remove("active");
+          });
+          dropdown.appendChild(noneLi);
+          totalMatches++;
+        }
+
+        groupsData.forEach(grp => {
+          const matchingItems = grp.items.filter(it => it.toLowerCase().includes(q));
+          if (matchingItems.length > 0) {
+            const groupHeader = document.createElement("li");
+            groupHeader.className = "autocomplete-group";
+            groupHeader.textContent = grp.group;
+            dropdown.appendChild(groupHeader);
+
+            matchingItems.forEach(it => {
+              totalMatches++;
+              const li = document.createElement("li");
+              li.className = "autocomplete-item";
+              li.textContent = it;
+              li.addEventListener("click", () => {
+                input.value = it;
+                dropdown.classList.remove("active");
+              });
+              dropdown.appendChild(li);
+            });
+          }
+        });
+
+        if (totalMatches === 0) {
+          const emptyLi = document.createElement("li");
+          emptyLi.className = "autocomplete-item";
+          emptyLi.style.color = "var(--text-muted)";
+          emptyLi.style.cursor = "default";
+          emptyLi.textContent = "No matching dishes found";
+          dropdown.appendChild(emptyLi);
+        }
+      }
+
+      input.addEventListener("focus", function() {
+        renderList(this.value);
+        dropdown.classList.add("active");
+      });
+
+      input.addEventListener("input", function() {
+        renderList(this.value);
+        dropdown.classList.add("active");
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", function(e) {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove("active");
+        }
+      });
+    }
+
+    // Initialize all standard (Items 01 - 06) and extra (Extra 01 - 05) dropdowns
+    ['item01', 'item02', 'item03', 'item04', 'item05', 'item06'].forEach(id => {
+      setupTypeahead(id, `${id}-dropdown`, STANDARD_MENU_GROUPS, false);
+    });
+
+    ['extra01', 'extra02', 'extra03', 'extra04', 'extra05'].forEach(id => {
+      setupTypeahead(id, `${id}-dropdown`, EXTRA_MENU_GROUPS, true);
+    });
+
     function toggleOtherDrink(show) {
       const container = document.getElementById("otherDrinkWrapper");
       const input = document.getElementById("otherDrinkName");
@@ -659,189 +976,6 @@
         input.value = "";
       }
     }
-
-    const STANDARD_MENU_HTML = `
-      <option value="">-- Choose Item --</option>
-      <optgroup label="Appetizers - Vegetarian">
-        <option value="Vegetable Samosa">Vegetable Samosa</option>
-        <option value="Samosa Chaat">Samosa Chaat</option>
-        <option value="Papdi Chaat">Papdi Chaat</option>
-        <option value="Paav Bhaji">Paav Bhaji</option>
-        <option value="Paneer 65">Paneer 65</option>
-        <option value="Paneer Tikka">Paneer Tikka</option>
-        <option value="Chilli Paneer">Chilli Paneer</option>
-        <option value="Gobi 65">Gobi 65</option>
-        <option value="Gobi Manchurian">Gobi Manchurian</option>
-        <option value="Crispy Corn Pepper Fry">Crispy Corn Pepper Fry</option>
-        <option value="Cut Mirchi">Cut Mirchi</option>
-        <option value="Hara Bhara Kabab">Hara Bhara Kabab</option>
-      </optgroup>
-      <optgroup label="Appetizers - Chicken (Halal)">
-        <option value="Chicken 65">Chicken 65</option>
-        <option value="Chili Chicken">Chili Chicken</option>
-        <option value="Chicken Manchurian">Chicken Manchurian</option>
-        <option value="Chicken Vepudu">Chicken Vepudu</option>
-        <option value="Chicken Pepper Fry">Chicken Pepper Fry</option>
-        <option value="Garlic Chicken">Garlic Chicken</option>
-        <option value="Chicken Tikka Boti">Chicken Tikka Boti</option>
-        <option value="Lasooni Murgh Tikka">Lasooni Murgh Tikka</option>
-        <option value="Malai Murgh Tikka">Malai Murgh Tikka</option>
-        <option value="Murgh Chuttneywala">Murgh Chuttneywala</option>
-        <option value="Hariyali Murgh Tikka">Hariyali Murgh Tikka</option>
-        <option value="Murgh Tikka">Murgh Tikka</option>
-        <option value="Saffron Murgh Tikka">Saffron Murgh Tikka</option>
-        <option value="Red Chili Chicken Kebab">Red Chili Chicken Kebab</option>
-        <option value="Murgh Tangdi Kabab">Murgh Tangdi Kabab</option>
-        <option value="Chicken Seekh Kabab">Chicken Seekh Kabab</option>
-        <option value="Chicken Wings">Chicken Wings</option>
-        <option value="Chicken Lollipop">Chicken Lollipop</option>
-      </optgroup>
-      <optgroup label="Appetizers - Premium Mutton & Seafood (*)">
-        <option value="Mutton Sukka Kabab *">Mutton Sukka Kabab *</option>
-        <option value="Chili Shrimp *">Chili Shrimp *</option>
-        <option value="Prawn 65 *">Prawn 65 *</option>
-        <option value="Apollo Fish *">Apollo Fish *</option>
-        <option value="Fish Fry / Chatpata Fish *">Fish Fry / Chatpata Fish *</option>
-        <option value="Fish Finger *">Fish Finger *</option>
-        <option value="Tawa Fish *">Tawa Fish *</option>
-      </optgroup>
-      <optgroup label="Curries & Entrees - Vegetarian & Paneer">
-        <option value="Paneer Butter Masala">Paneer Butter Masala</option>
-        <option value="Paneer Tikka Masala">Paneer Tikka Masala</option>
-        <option value="Palak Paneer">Palak Paneer</option>
-        <option value="Kadai Paneer">Kadai Paneer</option>
-        <option value="Malai Kofta">Malai Kofta</option>
-        <option value="Navratan Korma">Navratan Korma</option>
-        <option value="Chole Masala">Chole Masala</option>
-        <option value="Bhindi Masala">Bhindi Masala</option>
-        <option value="Dal Makhani">Dal Makhani</option>
-        <option value="Dal Fry">Dal Fry</option>
-        <option value="Yellow Dal Tadka / Peeli Dal">Yellow Dal Tadka / Peeli Dal</option>
-        <option value="Katti Dal">Katti Dal</option>
-        <option value="Sambar">Sambar</option>
-      </optgroup>
-      <optgroup label="Curries & Entrees - Chicken & Egg (Halal)">
-        <option value="Butter Chicken">Butter Chicken</option>
-        <option value="Chicken Tikka Masala">Chicken Tikka Masala</option>
-        <option value="Chicken Chettinad Curry">Chicken Chettinad Curry</option>
-        <option value="Andhra Chicken Curry">Andhra Chicken Curry</option>
-        <option value="Nizami Chicken Curry">Nizami Chicken Curry</option>
-        <option value="Pepper Chicken Masala">Pepper Chicken Masala</option>
-        <option value="Hyderabadi Chicken Curry (Spicy)">Hyderabadi Chicken Curry (Spicy)</option>
-        <option value="Chicken Korma">Chicken Korma</option>
-        <option value="Chicken Vindaloo">Chicken Vindaloo</option>
-        <option value="Kadai Chicken">Kadai Chicken</option>
-        <option value="Egg Masala Curry">Egg Masala Curry</option>
-      </optgroup>
-      <optgroup label="Curries & Entrees - Premium Goat, Mutton & Seafood (*)">
-        <option value="Goat Curry / Karahi *">Goat Curry / Karahi *</option>
-        <option value="Goat Sukka *">Goat Sukka *</option>
-        <option value="Goat Vindaloo *">Goat Vindaloo *</option>
-        <option value="Goat Korma *">Goat Korma *</option>
-        <option value="Nilgiri Goat Korma *">Nilgiri Goat Korma *</option>
-        <option value="Goat Kaliya *">Goat Kaliya *</option>
-        <option value="Goat Dalcha *">Goat Dalcha *</option>
-        <option value="Goat Laal Maas *">Goat Laal Maas *</option>
-        <option value="Prawn Masala *">Prawn Masala *</option>
-        <option value="Prawn Pepper Masala *">Prawn Pepper Masala *</option>
-        <option value="Madras Fish Curry *">Madras Fish Curry *</option>
-        <option value="Malabar Fish Curry *">Malabar Fish Curry *</option>
-        <option value="Fish Moilee *">Fish Moilee *</option>
-        <option value="Chepala Pulusu *">Chepala Pulusu *</option>
-      </optgroup>
-      <optgroup label="Biryanis - Standard (Chicken / Veg / Paneer / Egg)">
-        <option value="Hyderabadi Chicken Dum Biryani">Hyderabadi Chicken Dum Biryani</option>
-        <option value="Veg Dum Biryani">Veg Dum Biryani</option>
-        <option value="Paneer Dum Biryani">Paneer Dum Biryani</option>
-        <option value="Egg Dum Biryani">Egg Dum Biryani</option>
-      </optgroup>
-      <optgroup label="Biryanis - Premium (*)">
-        <option value="Goat Dum Biryani *">Goat Dum Biryani *</option>
-        <option value="Mutton Keema Biryani *">Mutton Keema Biryani *</option>
-      </optgroup>
-      <optgroup label="Desserts">
-        <option value="Warm Gulab Jamun">Warm Gulab Jamun</option>
-        <option value="Rasmalai">Rasmalai</option>
-        <option value="Gajar Ka Halwa">Gajar Ka Halwa</option>
-        <option value="Double Ka Meetha">Double Ka Meetha</option>
-        <option value="Rice Kheer">Rice Kheer</option>
-        <option value="Mango Kulfi">Mango Kulfi</option>
-        <option value="Qubani Ka Meetha">Qubani Ka Meetha</option>
-      </optgroup>
-    `;
-
-    const EXTRA_MENU_HTML = `
-      <option value="">-- None --</option>
-      <optgroup label="Extra Vegetarian ($2.00 / guest)">
-        <option value="Extra: Vegetable Samosa (+$2.00)">Vegetable Samosa (+$2.00)</option>
-        <option value="Extra: Samosa Chaat (+$2.00)">Samosa Chaat (+$2.00)</option>
-        <option value="Extra: Papdi Chaat (+$2.00)">Papdi Chaat (+$2.00)</option>
-        <option value="Extra: Paav Bhaji (+$2.00)">Paav Bhaji (+$2.00)</option>
-        <option value="Extra: Gobi 65 (+$2.00)">Gobi 65 (+$2.00)</option>
-        <option value="Extra: Gobi Manchurian (+$2.00)">Gobi Manchurian (+$2.00)</option>
-        <option value="Extra: Crispy Corn Pepper Fry (+$2.00)">Crispy Corn Pepper Fry (+$2.00)</option>
-        <option value="Extra: Cut Mirchi (+$2.00)">Cut Mirchi (+$2.00)</option>
-        <option value="Extra: Hara Bhara Kabab (+$2.00)">Hara Bhara Kabab (+$2.00)</option>
-        <option value="Extra: Dal Makhani (+$2.00)">Dal Makhani (+$2.00)</option>
-        <option value="Extra: Dal Fry (+$2.00)">Dal Fry (+$2.00)</option>
-        <option value="Extra: Yellow Dal Tadka (+$2.00)">Yellow Dal Tadka (+$2.00)</option>
-        <option value="Extra: Chole Masala (+$2.00)">Chole Masala (+$2.00)</option>
-        <option value="Extra: Bhindi Masala (+$2.00)">Bhindi Masala (+$2.00)</option>
-        <option value="Extra: Navratan Korma (+$2.00)">Navratan Korma (+$2.00)</option>
-        <option value="Extra: Veg Dum Biryani (+$2.00)">Veg Dum Biryani (+$2.00)</option>
-        <option value="Extra: Warm Gulab Jamun (+$2.00)">Warm Gulab Jamun (+$2.00)</option>
-        <option value="Extra: Rasmalai (+$2.00)">Rasmalai (+$2.00)</option>
-        <option value="Extra: Gajar Ka Halwa (+$2.00)">Gajar Ka Halwa (+$2.00)</option>
-        <option value="Extra: Double Ka Meetha (+$2.00)">Double Ka Meetha (+$2.00)</option>
-        <option value="Extra: Rice Kheer (+$2.00)">Rice Kheer (+$2.00)</option>
-      </optgroup>
-      <optgroup label="Extra Paneer, Chicken & Egg ($2.50 / guest)">
-        <option value="Extra: Paneer 65 (+$2.50)">Paneer 65 (+$2.50)</option>
-        <option value="Extra: Paneer Tikka (+$2.50)">Paneer Tikka (+$2.50)</option>
-        <option value="Extra: Chilli Paneer (+$2.50)">Chilli Paneer (+$2.50)</option>
-        <option value="Extra: Paneer Butter Masala (+$2.50)">Paneer Butter Masala (+$2.50)</option>
-        <option value="Extra: Paneer Tikka Masala (+$2.50)">Paneer Tikka Masala (+$2.50)</option>
-        <option value="Extra: Palak Paneer (+$2.50)">Palak Paneer (+$2.50)</option>
-        <option value="Extra: Kadai Paneer (+$2.50)">Kadai Paneer (+$2.50)</option>
-        <option value="Extra: Malai Kofta (+$2.50)">Malai Kofta (+$2.50)</option>
-        <option value="Extra: Paneer Dum Biryani (+$2.50)">Paneer Dum Biryani (+$2.50)</option>
-        <option value="Extra: Chicken 65 (+$2.50)">Chicken 65 (+$2.50)</option>
-        <option value="Extra: Chili Chicken (+$2.50)">Chili Chicken (+$2.50)</option>
-        <option value="Extra: Chicken Manchurian (+$2.50)">Chicken Manchurian (+$2.50)</option>
-        <option value="Extra: Chicken Tikka Boti (+$2.50)">Chicken Tikka Boti (+$2.50)</option>
-        <option value="Extra: Chicken Seekh Kabab (+$2.50)">Chicken Seekh Kabab (+$2.50)</option>
-        <option value="Extra: Chicken Lollipop (+$2.50)">Chicken Lollipop (+$2.50)</option>
-        <option value="Extra: Butter Chicken (+$2.50)">Butter Chicken (+$2.50)</option>
-        <option value="Extra: Chicken Tikka Masala (+$2.50)">Chicken Tikka Masala (+$2.50)</option>
-        <option value="Extra: Chicken Chettinad (+$2.50)">Chicken Chettinad (+$2.50)</option>
-        <option value="Extra: Kadai Chicken (+$2.50)">Kadai Chicken (+$2.50)</option>
-        <option value="Extra: Egg Masala Curry (+$2.50)">Egg Masala Curry (+$2.50)</option>
-        <option value="Extra: Hyderabadi Chicken Dum Biryani (+$2.50)">Chicken Dum Biryani (+$2.50)</option>
-        <option value="Extra: Egg Dum Biryani (+$2.50)">Egg Dum Biryani (+$2.50)</option>
-      </optgroup>
-      <optgroup label="Extra Lamb, Goat, Mutton & Seafood ($3.00 / guest)">
-        <option value="Extra: Mutton Sukka Kabab (+$3.00)">Mutton Sukka Kabab (+$3.00)</option>
-        <option value="Extra: Chili Shrimp (+$3.00)">Chili Shrimp (+$3.00)</option>
-        <option value="Extra: Prawn 65 (+$3.00)">Prawn 65 (+$3.00)</option>
-        <option value="Extra: Apollo Fish (+$3.00)">Apollo Fish (+$3.00)</option>
-        <option value="Extra: Fish Fry / Chatpata Fish (+$3.00)">Fish Fry / Chatpata Fish (+$3.00)</option>
-        <option value="Extra: Goat Curry / Karahi (+$3.00)">Goat Curry / Karahi (+$3.00)</option>
-        <option value="Extra: Goat Sukka (+$3.00)">Goat Sukka (+$3.00)</option>
-        <option value="Extra: Goat Korma (+$3.00)">Goat Korma (+$3.00)</option>
-        <option value="Extra: Prawn Masala (+$3.00)">Prawn Masala (+$3.00)</option>
-        <option value="Extra: Malabar Fish Curry (+$3.00)">Malabar Fish Curry (+$3.00)</option>
-        <option value="Extra: Goat Dum Biryani (+$3.00)">Goat Dum Biryani (+$3.00)</option>
-        <option value="Extra: Mutton Keema Biryani (+$3.00)">Mutton Keema Biryani (+$3.00)</option>
-      </optgroup>
-    `;
-
-    document.querySelectorAll('.standard-menu-select').forEach(sel => {
-      sel.innerHTML = STANDARD_MENU_HTML;
-    });
-
-    document.querySelectorAll('.extra-menu-select').forEach(sel => {
-      sel.innerHTML = EXTRA_MENU_HTML;
-    });
 
     function limitSashes(max) {
       const checked = document.querySelectorAll('input[name="sashColors"]:checked');
@@ -857,7 +991,88 @@
       });
     }
 
-    function handleFormSubmit(e) {
+    function generateAndDownloadPDF(formData) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "letter" });
+
+      doc.setFillColor(197, 157, 95);
+      doc.rect(0, 0, 612, 50, "F");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(15);
+      doc.setTextColor(255, 255, 255);
+      doc.text("iGrill Banquet Hall - Menu Confirmation & Agreement", 40, 32);
+
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100);
+      doc.text("3170 De La Cruz Blvd, #131, Santa Clara, CA 95054 | Phone: (669) 230-6116", 40, 68);
+
+      const tableData = [
+        [{ content: "1. Reservation & Contact", colSpan: 2, styles: { fillColor: [245, 240, 230], fontStyle: "bold", textColor: [120, 53, 15] } }],
+        ["Customer Name", formData.name],
+        ["Phone & Email", `${formData.phone} | ${formData.email}`],
+        ["Event Date & Slot", `${formData.eventDate} (${formData.slot} Session)`],
+        ["Advance Paid", formData.advancePaid],
+
+        [{ content: "2. Base Package Menu (9 Items)", colSpan: 2, styles: { fillColor: [245, 240, 230], fontStyle: "bold", textColor: [120, 53, 15] } }],
+        ["Welcome Drink", formData.welcomeDrink],
+        ["Item 01", formData.item01],
+        ["Item 02", formData.item02],
+        ["Item 03", formData.item03],
+        ["Item 04", formData.item04],
+        ["Item 05", formData.item05],
+        ["Item 06", formData.item06],
+        ["Rice Option", formData.rice],
+        ["Naan / Bread", formData.bread],
+
+        [{ content: "3. Extra Dishes & Add-ons", colSpan: 2, styles: { fillColor: [245, 240, 230], fontStyle: "bold", textColor: [120, 53, 15] } }],
+        ["Extra Items", formData.extraItems],
+        ["Beverages & Platters", formData.beverageAddons],
+
+        [{ content: "4. Tech, Linens & Serving Schedule", colSpan: 2, styles: { fillColor: [245, 240, 230], fontStyle: "bold", textColor: [120, 53, 15] } }],
+        ["Basic Tech ($50)", formData.basicTech],
+        ["Elaborate Tech ($150)", formData.elaborateTech],
+        ["White Table Cloths ($5/ea)", formData.tableClothsReq],
+        ["Chair Sashes ($1/guest)", formData.sashColors],
+        ["Own Liquor / Decorators", `Own Liquor: ${formData.ownLiquor} | Using Decorator: ${formData.usingDecorators}`],
+        ["Serving Schedule", formData.servingTimes],
+        ["Special Requests / Notes", formData.specialRequests],
+
+        [{ content: "5. Agreed Terms & Conditions", colSpan: 2, styles: { fillColor: [245, 240, 230], fontStyle: "bold", textColor: [120, 53, 15] } }],
+        [{ 
+          content: "• Cleaning/Service: $150 cleaning charge & 15% service charge added to final bill.\n" +
+                   "• Bookings: Non-refundable & non-transferable. Full invoice due 1 week prior to event.\n" +
+                   "• Headcount: Min 50 adults charged for premium slots (Sat Lunch/Dinner & Sun Lunch); min 30 adults for other slots.\n" +
+                   "• Billing: Charged on submitted count. Extra guests billed extra; no reduction if fewer attend.\n" +
+                   "• Hall Hours: Vacate by 3 PM (Lunch) / 10 PM (Dinner). Overtime is $50 per 30 mins.\n" +
+                   "• Refill Deadlines: Starters/Drinks by 12:30 PM (Lunch)/8:00 PM (Dinner); Mains by 1:30 PM (Lunch)/9:00 PM (Dinner).\n" +
+                   "• Rules: No to-go boxes (food cannot be taken home). No wall-damaging tape/nails. Supervise children at all times.\n" +
+                   "• Corkage: $2/Adult guest or $100 (higher of the two) if bringing own liquor.\n" +
+                   "• Status: Acknowledged & agreed by customer upon digital submission.", 
+          colSpan: 2, 
+          styles: { fontSize: 8, fontStyle: "normal", textColor: [50, 50, 50] } 
+        }]
+      ];
+
+      doc.autoTable({
+        startY: 80,
+        margin: { left: 40, right: 40 },
+        body: tableData,
+        theme: "grid",
+        styles: { fontSize: 8.5, cellPadding: 4, textColor: [30, 30, 30] },
+        columnStyles: {
+          0: { cellWidth: 150, fontStyle: "bold", textColor: [80, 80, 80] }
+        }
+      });
+
+      const finalY = doc.lastAutoTable.finalY + 15;
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text("Thank you for choosing iGrill. All party terms & conditions acknowledged at submission.", 40, finalY);
+
+      doc.save(`iGrill_Banquet_Menu_${formData.name.replace(/\s+/g, "_")}.pdf`);
+    }
+
+    async function handleFormSubmit(e) {
       e.preventDefault();
 
       const itemInputs = ['item01', 'item02', 'item03', 'item04', 'item05', 'item06'];
@@ -865,11 +1080,15 @@
 
       for (const id of itemInputs) {
         const val = document.getElementById(id).value;
+        if (!val || val.trim() === '') {
+          alert(`Please select an item for ${id.toUpperCase()}.`);
+          return;
+        }
         if (val.includes('*')) premiumCount++;
       }
 
       if (premiumCount > 3) {
-        alert("You have selected " + premiumCount + " premium items (marked with *). The package allows a maximum of 3 premium items.");
+        alert("You have selected " + premiumCount + " items marked with *. The package allows a maximum of 3.");
         return;
       }
 
@@ -881,15 +1100,76 @@
 
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.disabled = true;
-      submitBtn.textContent = "Submitting Menu Selection...";
+      submitBtn.textContent = "Generating PDF & Submitting Menu...";
 
-      setTimeout(() => {
-        alert("Thank you! Your banquet menu selections, add-ons, and logistics details have been successfully recorded.");
+      const welcomeDrinkChoice = document.querySelector('input[name="welcomeDrink"]:checked').value;
+      const otherDrinkVal = document.getElementById('otherDrinkName').value.trim();
+
+      const extraItemsArr = ['extra01', 'extra02', 'extra03', 'extra04', 'extra05']
+        .map(id => document.getElementById(id).value)
+        .filter(val => val && val.trim() !== '' && val !== '-- None --');
+
+      const beverageAddonsArr = Array.from(document.querySelectorAll('input[name="beverageAddons"]:checked')).map(cb => cb.value);
+      const breadArr = Array.from(document.querySelectorAll('input[name="bread"]:checked')).map(cb => cb.value);
+      const sashColorsArr = Array.from(document.querySelectorAll('input[name="sashColors"]:checked')).map(cb => cb.value);
+
+      const formData = {
+        name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        eventDate: document.getElementById('eventDate').value,
+        slot: document.getElementById('slot').value,
+        advancePaid: document.getElementById('advancePaid').value.trim(),
+        welcomeDrink: welcomeDrinkChoice === "Other" ? (otherDrinkVal || "Other") : welcomeDrinkChoice,
+        item01: document.getElementById('item01').value,
+        item02: document.getElementById('item02').value,
+        item03: document.getElementById('item03').value,
+        item04: document.getElementById('item04').value,
+        item05: document.getElementById('item05').value,
+        item06: document.getElementById('item06').value,
+        rice: document.querySelector('input[name="rice"]:checked').value,
+        bread: breadArr.length > 0 ? breadArr.join(', ') : 'Plain Naan',
+        extraItems: extraItemsArr.length > 0 ? extraItemsArr.join(' | ') : 'None',
+        beverageAddons: beverageAddonsArr.length > 0 ? beverageAddonsArr.join(', ') : 'None',
+        basicTech: document.querySelector('input[name="basicTech"]:checked').value,
+        elaborateTech: document.querySelector('input[name="elaborateTech"]:checked').value,
+        tableClothsReq: document.querySelector('input[name="tableClothsReq"]:checked').value,
+        sashColors: sashColorsArr.length > 0 ? sashColorsArr.join(', ') : 'None',
+        ownLiquor: document.querySelector('input[name="ownLiquor"]:checked').value,
+        usingDecorators: document.querySelector('input[name="usingDecorators"]:checked').value,
+        servingTimes: document.getElementById('servingTimes').value.trim(),
+        specialRequests: document.getElementById('specialRequests').value.trim()
+      };
+
+      // 1. Instant client-side PDF download with Terms & Conditions
+      generateAndDownloadPDF(formData);
+
+      // 2. Dispatch via URLSearchParams POST to Apps Script to send email with PDF attachment
+      try {
+        const payload = new URLSearchParams();
+        for (const key in formData) {
+          payload.append(key, formData[key]);
+        }
+
+        await fetch(APPS_SCRIPT_MENU_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: payload.toString()
+        });
+
+        alert("Thank you! Your menu selections have been recorded. A PDF summary with agreed Terms & Conditions has been downloaded, and a copy has been emailed to you and banquet management.");
         document.getElementById('banquet-form').reset();
         toggleOtherDrink(false);
+      } catch (err) {
+        console.error("Submission dispatch error:", err);
+        alert("Your menu PDF has been downloaded. If you do not receive an email copy shortly, please call us directly at (669) 230-6116.");
+      } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Submit Banquet Menu Selection";
-      }, 1200);
+      }
     }
   </script>
 </body>
