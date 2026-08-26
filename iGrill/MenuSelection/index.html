@@ -188,13 +188,6 @@
       margin-bottom: 0.4rem;
     }
 
-    .input-hint {
-      display: block;
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      margin-top: 0.3rem;
-    }
-
     .form-group input[type="text"],
     .form-group input[type="number"],
     .form-group input[type="email"],
@@ -222,7 +215,6 @@
       box-shadow: 0 0 0 3px rgba(197, 157, 95, 0.2);
     }
 
-    /* Typeahead Autocomplete Search Dropdown Styling */
     .autocomplete-wrapper {
       position: relative;
       width: 100%;
@@ -298,7 +290,7 @@
     .choice-group {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     .choice-row {
@@ -321,6 +313,23 @@
       margin-top: 0.25rem;
       accent-color: var(--primary);
       cursor: pointer;
+    }
+
+    .option-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .option-title {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .option-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin-top: 0.15rem;
     }
 
     .other-drink-container {
@@ -417,7 +426,7 @@
         <ul>
           <li>Welcome Drink</li>
           <li>Total of Six items (Appetizers, Curries, Rice items, and Desserts)</li>
-          <li>Jeera Rice / Plain Rice</li>
+          <li>Rice Selection (Included)</li>
           <li>Naan (plain/butter)</li>
         </ul>
         <div class="pricing-note">
@@ -451,8 +460,19 @@
               <input type="email" id="email" name="email" required placeholder="name@example.com" />
             </div>
             <div class="form-group">
-              <label for="eventDate">Event Date *</label>
+              <label for="eventDate">Event Date (Future dates only) *</label>
               <input type="date" id="eventDate" name="eventDate" required />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="adultGuests">Adult Guest Count (12+ years) *</label>
+              <input type="number" id="adultGuests" name="adultGuests" min="30" required placeholder="Min 30 adults" />
+            </div>
+            <div class="form-group">
+              <label for="kidsGuests">Kids Guest Count (3+ years)</label>
+              <input type="number" id="kidsGuests" name="kidsGuests" min="0" value="0" placeholder="0" />
             </div>
           </div>
 
@@ -555,11 +575,17 @@
 
           <div class="form-grid-2">
             <div class="form-group">
-              <label>Rice Selection *</label>
+              <label>Rice Selection (Included in Base) *</label>
               <div class="choice-group">
                 <label class="choice-label"><input type="radio" name="rice" value="Steamed Rice" required> Steamed Rice</label>
                 <label class="choice-label"><input type="radio" name="rice" value="Jeera Rice"> Jeera Rice</label>
                 <label class="choice-label"><input type="radio" name="rice" value="Peas Pulao"> Peas Pulao</label>
+                <label class="choice-label"><input type="radio" name="rice" value="Jeera Pulao"> Jeera Pulao</label>
+                <label class="choice-label"><input type="radio" name="rice" value="Safron Pulao"> Safron Pulao</label>
+                <label class="choice-label"><input type="radio" name="rice" value="Mix Veg Pulao"> Mix Veg Pulao</label>
+                <label class="choice-label"><input type="radio" name="rice" value="Tamarind Rice"> Tamarind Rice</label>
+                <label class="choice-label"><input type="radio" name="rice" value="Lemon Rice"> Lemon Rice</label>
+                <label class="choice-label"><input type="radio" name="rice" value="Curd Rice"> Curd Rice</label>
               </div>
             </div>
             <div class="form-group">
@@ -645,29 +671,41 @@
           </div>
         </div>
 
-        <!-- Section 5: Tech Packages, Linens & Sashes -->
+        <!-- Section 5: Tech Packages & Decor Options -->
         <div class="section-block">
           <div class="section-title">5. Tech Packages & Decor Options</div>
+          <div class="section-subtitle">Choose one audio-visual tech package for your event, and configure decor rentals.</div>
           
           <div class="form-group">
-            <label>Basic Tech Package - $50 (Boom Box & Wireless Speaker)*</label>
-            <span class="input-hint">Includes Boom Box, Wireless Mikes (2), Projector</span>
-            <div class="choice-row">
-              <label class="choice-label"><input type="radio" name="basicTech" value="No" checked> No</label>
-              <label class="choice-label"><input type="radio" name="basicTech" value="Yes"> Yes</label>
+            <label>Audio/Visual Tech Package *</label>
+            <div class="choice-group">
+              <label class="choice-label">
+                <input type="radio" name="techPackage" value="No Tech Package ($0)" checked>
+                <div class="option-details">
+                  <span class="option-title">No Tech Package ($0)</span>
+                  <span class="option-sub">No venue sound equipment, projector, or microphone provided.</span>
+                </div>
+              </label>
+
+              <label class="choice-label">
+                <input type="radio" name="techPackage" value="Basic Tech Package ($50)">
+                <div class="option-details">
+                  <span class="option-title">Basic Tech Package - $50 (Boom Box & Wireless Speaker)</span>
+                  <span class="option-sub">Includes Boom Box, Wireless Mikes (2), Projector</span>
+                </div>
+              </label>
+
+              <label class="choice-label">
+                <input type="radio" name="techPackage" value="Elaborate Tech Package ($150)">
+                <div class="option-details">
+                  <span class="option-title">Elaborate Tech Package - $150 (High Bass Speakers, Wireless Mikes, Projectors, TVs)</span>
+                  <span class="option-sub">Includes QSC KS118 3600W 18" Subwoofer and mounted Speakers, Wireless Mikes, Projector, 5 x Samsung 65 inch TVs</span>
+                </div>
+              </label>
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Elaborate Tech Package - $150 (High Bass Speakers, Wireless Mikes, Projectors, TVs)*</label>
-            <span class="input-hint">Includes QSC KS118 3600W 18" Subwoofer and mounted Speakers, Wireless Mikes, Projector, 5 x Samsung 65 inch TVs</span>
-            <div class="choice-row">
-              <label class="choice-label"><input type="radio" name="elaborateTech" value="No" checked> No</label>
-              <label class="choice-label"><input type="radio" name="elaborateTech" value="Yes"> Yes</label>
-            </div>
-          </div>
-
-          <div class="form-group">
+          <div class="form-group" style="margin-top: 1.25rem;">
             <label>Do you need WHITE Table Cloths? ($5 per table cloth)*</label>
             <div class="choice-row">
               <label class="choice-label"><input type="radio" name="tableClothsReq" value="No" checked> No</label>
@@ -776,127 +814,403 @@
   <script>
     const APPS_SCRIPT_MENU_URL = "https://script.google.com/macros/s/AKfycbyxpPJc1t8Fd0XSn2uk5atlk2AOA4VDoiRe8JJymsJUUIV5EZKu6sxWHz5ZUpvCHYfk/exec";
 
-    // Structured menu datasets with * for Paneer & Non-Veg, and ($3 extra) * for Goat/Mutton
+    function enforceMinEventDate() {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const yyyy = tomorrow.getFullYear();
+      const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+      const dd = String(tomorrow.getDate()).padStart(2, '0');
+      document.getElementById('eventDate').min = `${yyyy}-${mm}-${dd}`;
+    }
+    enforceMinEventDate();
+
+    // Standard Core Menu Dataset
     const STANDARD_MENU_GROUPS = [
       {
         group: "Appetizers - Vegetarian",
         items: [
-          "Vegetable Samosa", "Samosa Chaat", "Papdi Chaat", "Paav Bhaji ($1 extra)", 
-          "Gobi 65", "Gobi Manchurian", "Crispy Corn Pepper Fry", 
-          "Cut Mirchi", "Hara Bhara Kabab"
+          "Paneer 65 *",
+          "Chili Paneer *",
+          "Ajwine Paneer Tikka * ($1 extra)",
+          "Gobi 65",
+          "Chili Gobi",
+          "Gobi Manchurian",
+          "Hariyali Tikki",
+          "Masala Vada",
+          "Punugulu",
+          "Cut Mirchi",
+          "Cocktail Samosa",
+          "Chili Mushroom",
+          "Baby Corn 65",
+          "Baby Corn Manchuian",
+          "Chili Babycorn",
+          "Tampura Babycorn",
+          "Onion Pakoda",
+          "Palak Pakoda",
+          "Mix Veg Pakoda",
+          "Karila 65",
+          "Karila Pakoda",
+          "Tindora Fry",
+          "Bhindi Fry",
+          "Cabbage Poriyal",
+          "Mix Veg Poriyal",
+          "Vegetable Samosa",
+          "Crispy Corn Pepper Fry",
+          "Hara Bhara Kabab"
         ]
       },
       {
-        group: "Appetizers - Paneer (*)",
+        group: "Chaat Items",
         items: [
-          "Paneer 65 *", "Ajwine Paneer Tikka ($1 extra) *", "Chilli Paneer *"
-        ]
-      },
-      {
-        group: "Appetizers - Chicken (*)",
-        items: [
-          "Chicken 65 *", "Chili Chicken *", "Chicken Manchurian *", "Chicken Vepudu *", "Chicken Pepper Fry *", 
-          "Garlic Chicken *", "Chicken Tikka Boti ($1 extra) *", "Lasooni Murgh Tikka ($1 extra) *", "Malai Murgh Tikka ($1 extra) *", 
-          "Murgh Chuttneywala ($1 extra) *", "Hariyali Murgh Tikka *", "Murgh Tikka ($1 extra) *", "Saffron Murgh Tikka *($1 extra) *" , 
-          "Red Chili Chicken Kebab ($1 extra) *", "Murgh Tangdi Kabab ($1 extra) *", "Chicken Seekh Kabab ($1 extra) *", "Chicken Wings ($1 extra) *", "Chicken Lollipop *"
-        ]
-      },
-      {
-        group: "Appetizers - Mutton & Seafood (*)",
-        items: [
-          "Mutton Sukka Kabab ($3 extra) *", "Chili Shrimp ($3 extra) *", "Prawn 65 ($3 extra) *", "Apollo Fish *", 
-          "Fish Fry / Chatpata Fish ($3 extra) *", "Fish Finger *", "Tawa Fish *"
+          "Papdi Chaat",
+          "Paav Bhaji * ($1 extra)",
+          "Samosa Chaat"
         ]
       },
       {
         group: "Curries & Entrees - Vegetarian",
         items: [
-          "Dal Makhani", "Dal Fry", "Yellow Dal Tadka / Peeli Dal", "Katti Dal", 
-          "Sambar", "Chole Masala", "Bhindi Masala", "Navratan Korma"
+          "Channa Masala",
+          "Bhindi Masala",
+          "Tindora Masala",
+          "Aloo Gobi Masala",
+          "Capsicum & Aloo Mutter Masala",
+          "Kadai Vegetables",
+          "Veg Jalfrezi",
+          "Mor Kuzhambu",
+          "Began Bartha",
+          "Mix Veg Korma",
+          "Avial",
+          "Kathrikkai Kuzhambu",
+          "Bagara Began",
+          "Kara Kuzhambu",
+          "Mushroom Mutter Masala",
+          "Mushroom Palak",
+          "Mushroom Masala (Spicy)",
+          "Navrathan Kurma"
         ]
       },
       {
-        group: "Curries & Entrees - Paneer (*)",
+        group: "Dal Items",
         items: [
-          "Paneer Butter Masala *", "Paneer Tikka Masala *", "Palak Paneer *", 
-          "Kadai Paneer *", "Malai Kofta *"
+          "Masala Dal",
+          "Dal Fry",
+          "Peeli Dal",
+          "Katti Dal",
+          "Dal Makhani",
+          "Sambar"
+        ]
+      },
+      {
+        group: "Curries & Entrees - Paneer & Kofta (*)",
+        items: [
+          "Paneer Butter Masala *",
+          "Paneer Tikka Masala *",
+          "Peshwari Paneer *",
+          "Palak Paneer *",
+          "Shahi Paneer *",
+          "Kadai Paneer *",
+          "Malai Kofta *"
+        ]
+      },
+      {
+        group: "Appetizers - Chicken (*)",
+        items: [
+          "Chicken 65 *",
+          "Chili Chicken *",
+          "Chicken Manchurian *",
+          "Chicken Vepudu *",
+          "Chicken Pepper Fry * ($1 extra)",
+          "Garlic Chicken *",
+          "Lasooni Murgh Tikka * ($1 extra)",
+          "Malai Murgh Tikka * ($1 extra)",
+          "Murgh Chuttneywala * ($1 extra)",
+          "Hariyali Murgh Tikka * ($1 extra)",
+          "Murgh Tikka * ($1 extra)",
+          "Saffron Murgh Tikka * ($1 extra)",
+          "Red Chili Chicken Kebab * ($1 extra)",
+          "Chicken Wings * ($1 extra)",
+          "Murgh Tangdi Kabab * ($1 extra)",
+          "Chicken Boti Kabab * ($1 extra)",
+          "Chicken Nuggets *"
+        ]
+      },
+      {
+        group: "Appetizers - Seafood (* | $3 Extra)",
+        items: [
+          "Chili Shrimp ($3 extra) *",
+          "Prawn 65 ($3 extra) *",
+          "Fish Fry/Chatpata Fish ($3 extra) *",
+          "Fish Finger ($3 extra) *",
+          "Tawa Fish ($3 extra) *",
+          "Chili Fish ($3 extra) *",
+          "Apollo Fish ($3 extra) *"
         ]
       },
       {
         group: "Curries & Entrees - Chicken & Egg (*)",
         items: [
-          "Butter Chicken *", "Chicken Tikka Masala *", "Chicken Chettinad Curry *", "Andhra Chicken Curry *", 
-          "Nizami Chicken Curry *", "Pepper Chicken Masala *", "Hyderabadi Chicken Curry (Spicy) *", 
-          "Chicken Korma *", "Chicken Vindaloo *", "Kadai Chicken *", "Egg Masala Curry *"
+          "Butter Chicken *",
+          "Chicken Tikka Masala *",
+          "Chicken Chettinad Curry *",
+          "Andhra Chicken Curry *",
+          "Egg Masala Curry (Boiled or Running Egg) *",
+          "Nizami Chicken Curry *",
+          "Pepper Chicken Masala *",
+          "Hyderabadi Chicken Curry (Spicy) *",
+          "Chicken Korma *",
+          "Chicken Vindaloo *",
+          "Kadai Chicken *"
         ]
       },
       {
         group: "Curries & Entrees - Goat, Mutton & Seafood (*)",
         items: [
-          "Goat Curry / Karahi ($3 extra) *", "Goat Sukka ($3 extra) *", "Goat Vindaloo ($3 extra) *", "Goat Korma ($3 extra) *", 
-          "Nilgiri Goat Korma ($3 extra) *", "Goat Kaliya ($3 extra) *", "Goat Dalcha ($3 extra) *", "Goat Laal Maas ($3 extra) *", 
-          "Prawn Masala ($3 extra) *", "Prawn Pepper Masala ($3 extra) *", "Madras Fish Curry ($3 extra) *", "Malabar Fish Curry ($3 extra) *", 
-          "Fish Moilee ($3 extra) *", "Chepala Pulusu ($3 extra) *"
+          "Goat Curry ($3 Extra) *",
+          "Goat Sukka ($3 Extra) *",
+          "Goat Vindaloo ($3 Extra) *",
+          "Goat Korma ($3 Extra) *",
+          "Neeigiri Goat Korma ($3 Extra) *",
+          "Goat Kaliya ($3 Extra) *",
+          "Goat Dhalicha ($3 Extra) *",
+          "Goat Laal Mass ($3 Extra) *",
+          "Prawn Masala ($3 Extra) *",
+          "Prawn Pepper Masala ($3 Extra) *",
+          "Madras Fish Curry ($3 Extra) *",
+          "Malabar Fish Curry ($3 Extra) *",
+          "Fish Mouli ($3 Extra) *",
+          "Chapala Pulusu ($3 Extra) *",
+          "Mutton Kheema Curry ($3 Extra) *"
         ]
       },
       {
-        group: "Biryanis - Standard",
+        group: "Biryanis",
         items: [
-          "Veg Dum Biryani", "Paneer Dum Biryani *", "Hyderabadi Chicken Dum Biryani *", "Egg Dum Biryani *"
+          "Veg Dum Biryani",
+          "Paneer Dum Biryani *",
+          "Chicken Dum Biryani *",
+          "Boneless Chicken Biryani * ($1.50 Extra)",
+          "Great Kabab Chicken Biryani * ($1.50 Extra)",
+          "Goat Dum Biryani * ($3 Extra)",
+          "Mutton Keema Biryani * ($3 Extra)"
         ]
       },
       {
-        group: "Biryanis - Goat & Mutton (*)",
+        group: "Rice & Pulao Dishes",
         items: [
-          "Goat Dum Biryani ($3 extra) *", "Mutton Keema Biryani ($3 extra) *"
+          "Steamed Rice",
+          "Jeera Rice",
+          "Peas Pulao",
+          "Jeera Pulao",
+          "Safron Pulao",
+          "Mix Veg Pulao",
+          "Tamarind Rice",
+          "Lemon Rice",
+          "Curd Rice"
         ]
       },
       {
         group: "Desserts",
         items: [
-          "Warm Gulab Jamun", "Rasmalai", "Gajar Ka Halwa", "Double Ka Meetha", "Rice Kheer", "Mango Kulfi", "Qubani Ka Meetha"
+          "Carrot Halwa",
+          "Beetroot Halwa",
+          "Beetroot Halwa w/ Vanilla Mousse *",
+          "Carrot Halwa w/ Vanilla Mousse *",
+          "Mango Mousse",
+          "Avacado Mousse",
+          "Strawberry Mousse",
+          "Coffee Mousse",
+          "Pista Kulfi (1 4oz cup pp)",
+          "Mysore Pak * ($2.50 extra pp)",
+          "Rasmalai ($1 extra pp)",
+          "Semiya Payasam",
+          "Kesari",
+          "Sweet Pongal",
+          "Suji Payasam",
+          "Mango Payasam",
+          "Badam Milk",
+          "Double Ka Meetha",
+          "Shahi Ka Thukuda",
+          "Fried Bread with Coconut",
+          "Gulab Jamun",
+          "Mango Milk Shake",
+          "Strawberry Milkshake",
+          "Rice Kheer"
         ]
       }
     ];
 
+    // Extra Add-on Items Dataset
     const EXTRA_MENU_GROUPS = [
       {
-        group: "Extra Vegetarian ($2.00 / guest)",
+        group: "Extra Vegetarian, Dal, Rice & Standard Desserts ($2.00 / guest)",
         items: [
-          "Extra: Vegetable Samosa (+$2.00)", "Extra: Samosa Chaat (+$2.00)", "Extra: Papdi Chaat (+$2.00)", 
-          "Extra: Paav Bhaji (+$2.00)", "Extra: Gobi 65 (+$2.00)", "Extra: Gobi Manchurian (+$2.00)", 
-          "Extra: Crispy Corn Pepper Fry (+$2.00)", "Extra: Cut Mirchi (+$2.00)", "Extra: Hara Bhara Kabab (+$2.00)", 
-          "Extra: Dal Makhani (+$2.00)", "Extra: Dal Fry (+$2.00)", "Extra: Yellow Dal Tadka (+$2.00)", 
-          "Extra: Chole Masala (+$2.00)", "Extra: Bhindi Masala (+$2.00)", "Extra: Navratan Korma (+$2.00)", 
-          "Extra: Veg Dum Biryani (+$2.00)", "Extra: Warm Gulab Jamun (+$2.00)", "Extra: Rasmalai (+$2.00)", 
-          "Extra: Gajar Ka Halwa (+$2.00)", "Extra: Double Ka Meetha (+$2.00)", "Extra: Rice Kheer (+$2.00)"
+          "Extra: Gobi 65 (+$2.00)",
+          "Extra: Chili Gobi (+$2.00)",
+          "Extra: Gobi Manchurian (+$2.00)",
+          "Extra: Hariyali Tikki (+$2.00)",
+          "Extra: Masala Vada (+$2.00)",
+          "Extra: Punugulu (+$2.00)",
+          "Extra: Cut Mirchi (+$2.00)",
+          "Extra: Cocktail Samosa (+$2.00)",
+          "Extra: Chili Mushroom (+$2.00)",
+          "Extra: Baby Corn 65 (+$2.00)",
+          "Extra: Baby Corn Manchuian (+$2.00)",
+          "Extra: Chili Babycorn (+$2.00)",
+          "Extra: Tampura Babycorn (+$2.00)",
+          "Extra: Onion Pakoda (+$2.00)",
+          "Extra: Palak Pakoda (+$2.00)",
+          "Extra: Mix Veg Pakoda (+$2.00)",
+          "Extra: Karila 65 (+$2.00)",
+          "Extra: Karila Pakoda (+$2.00)",
+          "Extra: Tindora Fry (+$2.00)",
+          "Extra: Bhindi Fry (+$2.00)",
+          "Extra: Cabbage Poriyal (+$2.00)",
+          "Extra: Mix Veg Poriyal (+$2.00)",
+          "Extra: Vegetable Samosa (+$2.00)",
+          "Extra: Crispy Corn Pepper Fry (+$2.00)",
+          "Extra: Hara Bhara Kabab (+$2.00)",
+          "Extra Chaat: Papdi Chaat (+$2.00)",
+          "Extra Chaat: Samosa Chaat (+$2.00)",
+          "Extra: Channa Masala (+$2.00)",
+          "Extra: Bhindi Masala (+$2.00)",
+          "Extra: Tindora Masala (+$2.00)",
+          "Extra: Aloo Gobi Masala (+$2.00)",
+          "Extra: Capsicum & Aloo Mutter Masala (+$2.00)",
+          "Extra: Kadai Vegetables (+$2.00)",
+          "Extra: Veg Jalfrezi (+$2.00)",
+          "Extra: Mor Kuzhambu (+$2.00)",
+          "Extra: Began Bartha (+$2.00)",
+          "Extra: Mix Veg Korma (+$2.00)",
+          "Extra: Avial (+$2.00)",
+          "Extra: Kathrikkai Kuzhambu (+$2.00)",
+          "Extra: Bagara Began (+$2.00)",
+          "Extra: Kara Kuzhambu (+$2.00)",
+          "Extra: Mushroom Mutter Masala (+$2.00)",
+          "Extra: Mushroom Palak (+$2.00)",
+          "Extra: Mushroom Masala (Spicy) (+$2.00)",
+          "Extra: Navrathan Kurma (+$2.00)",
+          "Extra: Masala Dal (+$2.00)",
+          "Extra: Dal Fry (+$2.00)",
+          "Extra: Peeli Dal (+$2.00)",
+          "Extra: Katti Dal (+$2.00)",
+          "Extra: Dal Makhani (+$2.00)",
+          "Extra: Sambar (+$2.00)",
+          "Extra: Veg Dum Biryani (+$2.00)",
+          "Extra Rice: Steamed Rice (+$2.00)",
+          "Extra Rice: Jeera Rice (+$2.00)",
+          "Extra Rice: Peas Pulao (+$2.00)",
+          "Extra Rice: Jeera Pulao (+$2.00)",
+          "Extra Rice: Safron Pulao (+$2.00)",
+          "Extra Rice: Mix Veg Pulao (+$2.00)",
+          "Extra Rice: Tamarind Rice (+$2.00)",
+          "Extra Rice: Lemon Rice (+$2.00)",
+          "Extra Rice: Curd Rice (+$2.00)",
+          "Extra Dessert: Carrot Halwa (+$2.00)",
+          "Extra Dessert: Beetroot Halwa (+$2.00)",
+          "Extra Dessert: Beetroot Halwa w/ Vanilla Mousse * (+$2.00)",
+          "Extra Dessert: Carrot Halwa w/ Vanilla Mousse * (+$2.00)",
+          "Extra Dessert: Mango Mousse (+$2.00)",
+          "Extra Dessert: Avacado Mousse (+$2.00)",
+          "Extra Dessert: Strawberry Mousse (+$2.00)",
+          "Extra Dessert: Coffee Mousse (+$2.00)",
+          "Extra Dessert: Pista Kulfi (1 4oz cup pp) (+$2.00)",
+          "Extra Dessert: Semiya Payasam (+$2.00)",
+          "Extra Dessert: Kesari (+$2.00)",
+          "Extra Dessert: Sweet Pongal (+$2.00)",
+          "Extra Dessert: Suji Payasam (+$2.00)",
+          "Extra Dessert: Mango Payasam (+$2.00)",
+          "Extra Dessert: Badam Milk (+$2.00)",
+          "Extra Dessert: Double Ka Meetha (+$2.00)",
+          "Extra Dessert: Shahi Ka Thukuda (+$2.00)",
+          "Extra Dessert: Fried Bread with Coconut (+$2.00)",
+          "Extra Dessert: Gulab Jamun (+$2.00)",
+          "Extra Dessert: Mango Milk Shake (+$2.00)",
+          "Extra Dessert: Strawberry Milkshake (+$2.00)",
+          "Extra Dessert: Rice Kheer (+$2.00)"
         ]
       },
       {
-        group: "Extra Paneer, Chicken & Egg ($2.50 / guest)",
+        group: "Extra Paneer, Kofta, Chicken & Specialty Items ($2.50 / guest)",
         items: [
-          "Extra: Paneer 65 (+$2.50)", "Extra: Paneer Tikka (+$2.50)", "Extra: Chilli Paneer (+$2.50)", 
-          "Extra: Paneer Butter Masala (+$2.50)", "Extra: Paneer Tikka Masala (+$2.50)", "Extra: Palak Paneer (+$2.50)", 
-          "Extra: Kadai Paneer (+$2.50)", "Extra: Malai Kofta (+$2.50)", "Extra: Paneer Dum Biryani (+$2.50)", 
-          "Extra: Chicken 65 (+$2.50)", "Extra: Chili Chicken (+$2.50)", "Extra: Chicken Manchurian (+$2.50)", 
-          "Extra: Chicken Tikka Boti (+$2.50)", "Extra: Chicken Seekh Kabab (+$2.50)", "Extra: Chicken Lollipop (+$2.50)", 
-          "Extra: Butter Chicken (+$2.50)", "Extra: Chicken Tikka Masala (+$2.50)", "Extra: Chicken Chettinad (+$2.50)", 
-          "Extra: Kadai Chicken (+$2.50)", "Extra: Egg Masala Curry (+$2.50)", "Extra: Hyderabadi Chicken Dum Biryani (+$2.50)", 
-          "Extra: Egg Dum Biryani (+$2.50)"
+          "Extra: Paneer 65 * (+$2.50)",
+          "Extra: Chili Paneer * (+$2.50)",
+          "Extra: Ajwine Paneer Tikka * ($1 extra) (+$2.50)",
+          "Extra Chaat: Paav Bhaji * ($1 extra) (+$2.50)",
+          "Extra: Paneer Butter Masala * (+$2.50)",
+          "Extra: Paneer Tikka Masala * (+$2.50)",
+          "Extra: Peshwari Paneer * (+$2.50)",
+          "Extra: Palak Paneer * (+$2.50)",
+          "Extra: Shahi Paneer * (+$2.50)",
+          "Extra: Kadai Paneer * (+$2.50)",
+          "Extra: Malai Kofta * (+$2.50)",
+          "Extra: Paneer Dum Biryani * (+$2.50)",
+          "Extra: Chicken 65 * (+$2.50)",
+          "Extra: Chili Chicken * (+$2.50)",
+          "Extra: Chicken Manchurian * (+$2.50)",
+          "Extra: Chicken Vepudu * (+$2.50)",
+          "Extra: Chicken Pepper Fry * ($1 extra) (+$2.50)",
+          "Extra: Garlic Chicken * (+$2.50)",
+          "Extra: Lasooni Murgh Tikka * ($1 extra) (+$2.50)",
+          "Extra: Malai Murgh Tikka * ($1 extra) (+$2.50)",
+          "Extra: Murgh Chuttneywala * ($1 extra) (+$2.50)",
+          "Extra: Hariyali Murgh Tikka * ($1 extra) (+$2.50)",
+          "Extra: Murgh Tikka * ($1 extra) (+$2.50)",
+          "Extra: Saffron Murgh Tikka * ($1 extra) (+$2.50)",
+          "Extra: Red Chili Chicken Kebab * ($1 extra) (+$2.50)",
+          "Extra: Chicken Wings * ($1 extra) (+$2.50)",
+          "Extra: Murgh Tangdi Kabab * ($1 extra) (+$2.50)",
+          "Extra: Chicken Boti Kabab * ($1 extra) (+$2.50)",
+          "Extra: Chicken Nuggets * (+$2.50)",
+          "Extra: Butter Chicken * (+$2.50)",
+          "Extra: Chicken Tikka Masala * (+$2.50)",
+          "Extra: Chicken Chettinad Curry * (+$2.50)",
+          "Extra: Andhra Chicken Curry * (+$2.50)",
+          "Extra: Egg Masala Curry (Boiled or Running Egg) * (+$2.50)",
+          "Extra: Nizami Chicken Curry * (+$2.50)",
+          "Extra: Pepper Chicken Masala * (+$2.50)",
+          "Extra: Hyderabadi Chicken Curry (Spicy) * (+$2.50)",
+          "Extra: Chicken Korma * (+$2.50)",
+          "Extra: Chicken Vindaloo * (+$2.50)",
+          "Extra: Kadai Chicken * (+$2.50)",
+          "Extra: Chicken Dum Biryani (+$2.50)",
+          "Extra: Boneless Chicken Biryani * ($1.50 Extra) (+$2.50)",
+          "Extra: Great Kabab Chicken Biryani * ($1.50 Extra) (+$2.50)",
+          "Extra: Egg Dum Biryani (+$2.50)",
+          "Extra Dessert: Mysore Pak * ($2.50 extra pp) (+$2.50)"
         ]
       },
       {
         group: "Extra Lamb, Goat, Mutton & Seafood ($3.00 / guest)",
         items: [
-          "Extra: Mutton Sukka Kabab ($3 extra) (+$3.00)", "Extra: Chili Shrimp (+$3.00)", "Extra: Prawn 65 (+$3.00)", 
-          "Extra: Apollo Fish (+$3.00)", "Extra: Fish Fry / Chatpata Fish (+$3.00)", "Extra: Goat Curry / Karahi ($3 extra) (+$3.00)", 
-          "Extra: Goat Sukka ($3 extra) (+$3.00)", "Extra: Goat Korma ($3 extra) (+$3.00)", "Extra: Prawn Masala (+$3.00)", 
-          "Extra: Malabar Fish Curry (+$3.00)", "Extra: Goat Dum Biryani ($3 extra) (+$3.00)", "Extra: Mutton Keema Biryani ($3 extra) (+$3.00)"
+          "Extra: Chili Shrimp ($3 extra) (+$3.00)",
+          "Extra: Prawn 65 ($3 extra) (+$3.00)",
+          "Extra: Fish Fry/Chatpata Fish ($3 extra) (+$3.00)",
+          "Extra: Fish Finger ($3 extra) (+$3.00)",
+          "Extra: Tawa Fish ($3 extra) (+$3.00)",
+          "Extra: Chili Fish ($3 extra) (+$3.00)",
+          "Extra: Apollo Fish ($3 extra) (+$3.00)",
+          "Extra: Goat Curry ($3 Extra) (+$3.00)",
+          "Extra: Goat Sukka ($3 Extra) (+$3.00)",
+          "Extra: Goat Vindaloo ($3 Extra) (+$3.00)",
+          "Extra: Goat Korma ($3 Extra) (+$3.00)",
+          "Extra: Neeigiri Goat Korma ($3 Extra) (+$3.00)",
+          "Extra: Goat Kaliya ($3 Extra) (+$3.00)",
+          "Extra: Goat Dhalicha ($3 Extra) (+$3.00)",
+          "Extra: Goat Laal Mass ($3 Extra) (+$3.00)",
+          "Extra: Prawn Masala ($3 Extra) (+$3.00)",
+          "Extra: Prawn Pepper Masala ($3 Extra) (+$3.00)",
+          "Extra: Madras Fish Curry ($3 Extra) (+$3.00)",
+          "Extra: Malabar Fish Curry ($3 Extra) (+$3.00)",
+          "Extra: Fish Mouli ($3 Extra) (+$3.00)",
+          "Extra: Chapala Pulusu ($3 Extra) (+$3.00)",
+          "Extra: Mutton Kheema Curry ($3 Extra) (+$3.00)",
+          "Extra: Goat Dum Biryani * ($3 Extra) (+$3.00)", 
+          "Extra: Mutton Keema Biryani * ($3 Extra) (+$3.00)"
         ]
       }
     ];
 
-    // Setup Typeahead Autocomplete Search Dropdowns
     function setupTypeahead(inputId, dropdownId, groupsData, allowNone = false) {
       const input = document.getElementById(inputId);
       const dropdown = document.getElementById(dropdownId);
@@ -960,7 +1274,6 @@
         dropdown.classList.add("active");
       });
 
-      // Close dropdown when clicking outside
       document.addEventListener("click", function(e) {
         if (!input.contains(e.target) && !dropdown.contains(e.target)) {
           dropdown.classList.remove("active");
@@ -968,7 +1281,6 @@
       });
     }
 
-    // Initialize all standard (Items 01 - 06) and extra (Extra 01 - 05) dropdowns
     ['item01', 'item02', 'item03', 'item04', 'item05', 'item06'].forEach(id => {
       setupTypeahead(id, `${id}-dropdown`, STANDARD_MENU_GROUPS, false);
     });
@@ -1020,11 +1332,16 @@
       doc.setTextColor(100, 100, 100);
       doc.text("3170 De La Cruz Blvd, #131, Santa Clara, CA 95054 | Phone: (669) 230-6116", 40, 68);
 
+      // Format Table Cloth and Sash entries with explicit pricing labels
+      const tableClothsDisplay = formData.tableClothsReq === "Yes" ? "Yes ($5 per table cloth)" : "No ($0)";
+      const sashesDisplay = formData.sashColors !== "None" ? `${formData.sashColors} ($1 per guest)` : "None ($0)";
+
       const tableData = [
         [{ content: "1. Reservation & Contact", colSpan: 2, styles: { fillColor: [245, 240, 230], fontStyle: "bold", textColor: [120, 53, 15] } }],
         ["Customer Name", formData.name],
         ["Phone & Email", `${formData.phone} | ${formData.email}`],
         ["Event Date & Slot", `${formData.eventDate} (${formData.slot} Session)`],
+        ["Guest Counts", `Adults (12+ yrs): ${formData.adultGuests} | Kids (3+ yrs): ${formData.kidsGuests}`],
         ["Advance Paid", formData.advancePaid],
 
         [{ content: "2. Base Package Menu (9 Items)", colSpan: 2, styles: { fillColor: [245, 240, 230], fontStyle: "bold", textColor: [120, 53, 15] } }],
@@ -1043,10 +1360,9 @@
         ["Beverages & Platters", formData.beverageAddons],
 
         [{ content: "4. Tech, Linens & Serving Schedule", colSpan: 2, styles: { fillColor: [245, 240, 230], fontStyle: "bold", textColor: [120, 53, 15] } }],
-        ["Basic Tech ($50)", formData.basicTech],
-        ["Elaborate Tech ($150)", formData.elaborateTech],
-        ["White Table Cloths ($5/ea)", formData.tableClothsReq],
-        ["Chair Sashes ($1/guest)", formData.sashColors],
+        ["Audio/Visual Tech Package", formData.techPackage],
+        ["White Table Cloths", tableClothsDisplay],
+        ["Chair Sashes", sashesDisplay],
         ["Own Liquor / Decorators", `Own Liquor: ${formData.ownLiquor} | Using Decorator: ${formData.usingDecorators}`],
         ["Serving Schedule", formData.servingTimes],
         ["Special Requests / Notes", formData.specialRequests],
@@ -1088,6 +1404,22 @@
 
     async function handleFormSubmit(e) {
       e.preventDefault();
+
+      const selectedDateVal = document.getElementById('eventDate').value;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const chosenDate = new Date(selectedDateVal + 'T00:00:00');
+
+      if (chosenDate <= today) {
+        alert("Please select a valid future date. Today or past dates are not permitted.");
+        return;
+      }
+
+      const adultCount = parseInt(document.getElementById('adultGuests').value, 10);
+      if (isNaN(adultCount) || adultCount < 30) {
+        alert("Adult guest count is required and must be at least 30.");
+        return;
+      }
 
       const itemInputs = ['item01', 'item02', 'item03', 'item04', 'item05', 'item06'];
       let premiumCount = 0;
@@ -1132,6 +1464,8 @@
         phone: document.getElementById('phone').value.trim(),
         email: document.getElementById('email').value.trim(),
         eventDate: document.getElementById('eventDate').value,
+        adultGuests: document.getElementById('adultGuests').value,
+        kidsGuests: document.getElementById('kidsGuests').value || "0",
         slot: document.getElementById('slot').value,
         advancePaid: document.getElementById('advancePaid').value.trim(),
         welcomeDrink: welcomeDrinkChoice === "Other" ? (otherDrinkVal || "Other") : welcomeDrinkChoice,
@@ -1145,8 +1479,7 @@
         bread: breadArr.length > 0 ? breadArr.join(', ') : 'Plain Naan',
         extraItems: extraItemsArr.length > 0 ? extraItemsArr.join(' | ') : 'None',
         beverageAddons: beverageAddonsArr.length > 0 ? beverageAddonsArr.join(', ') : 'None',
-        basicTech: document.querySelector('input[name="basicTech"]:checked').value,
-        elaborateTech: document.querySelector('input[name="elaborateTech"]:checked').value,
+        techPackage: document.querySelector('input[name="techPackage"]:checked').value,
         tableClothsReq: document.querySelector('input[name="tableClothsReq"]:checked').value,
         sashColors: sashColorsArr.length > 0 ? sashColorsArr.join(', ') : 'None',
         ownLiquor: document.querySelector('input[name="ownLiquor"]:checked').value,
@@ -1155,10 +1488,10 @@
         specialRequests: document.getElementById('specialRequests').value.trim()
       };
 
-      // 1. Instant client-side PDF download with Terms & Conditions
+      // Generate & download PDF
       generateAndDownloadPDF(formData);
 
-      // 2. Dispatch via URLSearchParams POST to Apps Script to send email with PDF attachment
+      // Dispatch payload to Google Apps Script
       try {
         const payload = new URLSearchParams();
         for (const key in formData) {
@@ -1177,6 +1510,7 @@
         alert("Thank you! Your menu selections have been recorded. A PDF summary with agreed Terms & Conditions has been downloaded, and a copy has been emailed to you and banquet management.");
         document.getElementById('banquet-form').reset();
         toggleOtherDrink(false);
+        enforceMinEventDate();
       } catch (err) {
         console.error("Submission dispatch error:", err);
         alert("Your menu PDF has been downloaded. If you do not receive an email copy shortly, please call us directly at (669) 230-6116.");
