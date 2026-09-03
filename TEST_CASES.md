@@ -102,6 +102,23 @@ The scenarios below are derived from the browser tests in:
 
 ---
 
+### MS-04: Decorator details toggle and capture in PDF & submission payload
+
+| Field | Details |
+| --- | --- |
+| Test name | `test_decorator_selection_toggles_fields_and_captures_in_pdf` |
+| Feature | Decorator selection conditional fields and PDF capture |
+| Input parameters | Complete valid form, select "Yes" for "Are you using decorator(s) for your event?*", provide decorator name, decoration amount, and contact number |
+| Setup | Fill all valid fields, click "Yes" radio for usingDecorators, fill #decoratorName, #decoratorAmount, #decoratorPhone |
+| Expected outcome | When "Yes" is clicked, the decorator details container appears; when submitted, decorator fields are included in the Google Apps Script POST payload and captured in the PDF table; when "No" is selected, fields remain hidden and no extra decorator rows appear |
+| Edge cases | Default state is "No" with fields hidden; selecting "No" hides and clears fields without affecting the form |
+
+#### Validation notes
+- Confirms conditional display logic for decorator details.
+- Verifies that decorator information is properly captured in both the PDF agreement and the submission payload.
+
+---
+
 ## 2. Availability Inquiry Form Test Cases
 
 ### INQ-01: Availability response renders open and booked slots
@@ -223,6 +240,7 @@ The following test-case IDs are covered by real automated pytest tests in the Ba
 | MS-01 | `test_page_renders_with_minimum_date_and_company_footer` | `tests/test_menu_selection.py` |
 | MS-02 | `test_allows_more_than_three_premium_menu_items_with_warning_note` | `tests/test_menu_selection.py` |
 | MS-03 | `test_valid_menu_submission_posts_payload_and_resets_form` | `tests/test_menu_selection.py` |
+| MS-04 | `test_decorator_selection_toggles_fields_and_captures_in_pdf` | `tests/test_menu_selection.py` |
 | INQ-01 | `test_availability_response_renders_open_and_booked_slots` | `tests/test_inquiry_form.py` |
 | INQ-02 | `test_availability_api_failure_shows_error` | `tests/test_inquiry_form.py` |
 | INQ-03 | `test_successful_inquiry_submission` | `tests/test_inquiry_form.py` |
@@ -241,6 +259,7 @@ The following test-case IDs are covered by real automated pytest tests in the Ba
 | Menu rendering | Initial page state | Yes |
 | Date validation | Minimum allowed value | Yes |
 | Premium menu limit | Warning note & submission allowance | Yes |
+| Decorator details toggle | Conditional fields & PDF capture | Yes |
 | Successful menu submit | Payload + reset + PDF workflow | Yes |
 | Availability display | Open versus booked slots | Yes |
 | Availability load error | API failure message | Yes |

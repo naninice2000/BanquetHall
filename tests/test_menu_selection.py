@@ -138,3 +138,50 @@ def test_valid_menu_submission_posts_payload_and_resets_form(
     assert submitted["adultGuests"] == ["50"]
     assert submitted["slot"] == ["Dinner"]
     assert page.evaluate("window.testPdfData.name") == "Test Guest"
+
+
+@pytest.mark.test_case_id("MS-04")
+def test_decorator_selection_toggles_fields_and_captures_in_pdf(
+    page: Page, base_url: str
+) -> None:
+    submitted: dict[str, list[str]] = {}
+
+    def capture_submission(route: Route) -> None:
+        submitted.update(parse_qs(route.request.post_data or ""))
+        route.fulfill(status=200, content_type="text/plain", body="ok")
+
+    page.route("**/script.google.com/**", capture_submission)
+    open_form(page, base_url)
+    complete_valid_form(page)
+
+    # Verify decorator fields are initially hidden
+    expect(page.locator("#decoratorDetailsWrapper")).to_be_hidden()
+
+    # Select Yes for decorators
+    page.locator('input[name="usingDecorators"][value="Yes"]').check()
+    expect(page.locator("#decoratorDetailsWrapper")).to_be_visible()
+
+    # Fill decorator details
+    page.locator("#decoratorName").fill("Grand Events & Decor")
+    page.locator("#decoratorAmount").fill("$500.00")
+    page.locator("#decoratorPhone").fill("669-230-6116")
+
+    page.evaluate(
+        "generateAndDownloadPDF = formData => { window.testPdfData = formData; }"
+    )
+
+    alerts: list[str] = []
+    page.on("dialog", lambda dialog: (alerts.append(dialog.message), dialog.accept()))
+    page.locator("#submitBtn").click()
+
+    expect(page.locator("#name")).to_have_value("")
+    assert submitted["usingDecorators"] == ["Yes"]
+    assert submitted["decoratorName"] == ["Grand Events & Decor"]
+    assert submitted["decoratorAmount"] == ["$500.00"]
+    assert submitted["decoratorPhone"] == ["669-230-6116"]
+
+    # Verify PDF captures the decorator details
+    assert page.evaluate("window.testPdfData.usingDecorators") == "Yes"
+    assert page.evaluate("window.testPdfData.decoratorName") == "Grand Events & Decor"
+    assert page.evaluate("window.testPdfData.decoratorAmount") == "$500.00"
+    assert page.evaluate("window.testPdfData.decoratorPhone") == "669-230-6116"

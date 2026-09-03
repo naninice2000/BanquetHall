@@ -337,6 +337,15 @@
       display: none;
     }
 
+    .decorator-details-container {
+      margin-top: 0.85rem;
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1rem;
+    }
+
     .terms-box {
       background: #fafafa;
       border: 1px solid var(--border-color);
@@ -758,8 +767,24 @@
           <div class="form-group">
             <label>Are you using decorator(s) for your event?*</label>
             <div class="choice-row">
-              <label class="choice-label"><input type="radio" name="usingDecorators" value="No" checked> No</label>
-              <label class="choice-label"><input type="radio" name="usingDecorators" value="Yes"> Yes</label>
+              <label class="choice-label"><input type="radio" name="usingDecorators" value="No" checked onchange="toggleDecoratorDetails(false)"> No</label>
+              <label class="choice-label"><input type="radio" name="usingDecorators" value="Yes" onchange="toggleDecoratorDetails(true)"> Yes</label>
+            </div>
+            <div class="decorator-details-container" id="decoratorDetailsWrapper">
+              <div class="form-grid-3">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="decoratorName">Name of the Decorator:*</label>
+                  <input type="text" id="decoratorName" name="decoratorName" placeholder="Enter decorator name" autocomplete="off" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="decoratorAmount">Amount Paying For Decoration:*</label>
+                  <input type="text" id="decoratorAmount" name="decoratorAmount" placeholder="e.g. $500.00" autocomplete="off" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="decoratorPhone">Decorator Contact Number:*</label>
+                  <input type="tel" id="decoratorPhone" name="decoratorPhone" placeholder="e.g. (669) 230-6116" autocomplete="off" />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -829,7 +854,7 @@
   </div>
 
   <script>
-    const APPS_SCRIPT_MENU_URL = "https://script.google.com/macros/s/AKfycbx4Xjyb3NwMzih-zpDIKW7Syxr2Tgb39faxKQ2T-XcvXJOdaC7Ty0h_FZmW87HT48dn/exec";
+    const APPS_SCRIPT_MENU_URL = "https://script.google.com/macros/s/AKfycbxfeC_R1vzEyj2aR7dSncHacwrnzl9SuXkzAUwco1JiTN-sKe5mlaMiTbY7_sqXOtt-/exec";
 
     function enforceMinEventDate() {
       const tomorrow = new Date();
@@ -1352,6 +1377,29 @@
       }
     }
 
+    function toggleDecoratorDetails(show) {
+      const container = document.getElementById("decoratorDetailsWrapper");
+      const nameInput = document.getElementById("decoratorName");
+      const amountInput = document.getElementById("decoratorAmount");
+      const phoneInput = document.getElementById("decoratorPhone");
+
+      if (show) {
+        container.style.display = "block";
+        nameInput.required = true;
+        amountInput.required = true;
+        phoneInput.required = true;
+        nameInput.focus();
+      } else {
+        container.style.display = "none";
+        nameInput.required = false;
+        amountInput.required = false;
+        phoneInput.required = false;
+        nameInput.value = "";
+        amountInput.value = "";
+        phoneInput.value = "";
+      }
+    }
+
     function limitSashes(max) {
       const checked = document.querySelectorAll('input[name="sashColors"]:checked');
       if (checked.length > max) {
@@ -1413,6 +1461,11 @@
         ["White Table Cloths", tableClothsDisplay],
         ["Chair Sashes", sashesDisplay],
         ["Own Liquor / Decorators", `Own Liquor: ${formData.ownLiquor} | Using Decorator: ${formData.usingDecorators}`],
+        ...(formData.usingDecorators === "Yes" ? [
+          ["Name of the Decorator", formData.decoratorName || "N/A"],
+          ["Amount Paying For Decoration", formData.decoratorAmount || "N/A"],
+          ["Decorator Contact Number", formData.decoratorPhone || "N/A"]
+        ] : []),
         ["Serving Schedule", formData.servingTimes],
         ["Special Requests / Notes", formData.specialRequests],
 
@@ -1530,6 +1583,9 @@
         sashColors: sashColorsArr.length > 0 ? sashColorsArr.join(', ') : 'None',
         ownLiquor: document.querySelector('input[name="ownLiquor"]:checked').value,
         usingDecorators: document.querySelector('input[name="usingDecorators"]:checked').value,
+        decoratorName: document.getElementById('decoratorName').value.trim(),
+        decoratorAmount: document.getElementById('decoratorAmount').value.trim(),
+        decoratorPhone: document.getElementById('decoratorPhone').value.trim(),
         servingTimes: document.getElementById('servingTimes').value.trim(),
         specialRequests: document.getElementById('specialRequests').value.trim()
       };
@@ -1556,6 +1612,7 @@
         alert("Thank you! Your menu selections have been recorded. A PDF summary with agreed Terms & Conditions has been downloaded, and a copy has been emailed to you and banquet management.");
         document.getElementById('banquet-form').reset();
         toggleOtherDrink(false);
+        toggleDecoratorDetails(false);
         enforceMinEventDate();
         updatePremiumWarning();
       } catch (err) {

@@ -80,6 +80,9 @@ function handleMenuSubmission(e) {
       sashColors: params.sashColors || "None",
       ownLiquor: params.ownLiquor || "No",
       usingDecorators: params.usingDecorators || "No",
+      decoratorName: params.decoratorName || "",
+      decoratorAmount: params.decoratorAmount || "",
+      decoratorPhone: params.decoratorPhone || "",
       servingTimes: params.servingTimes || "Standard",
       specialRequests: params.specialRequests || "None"
     };
@@ -172,6 +175,11 @@ function sendMenuPdfEmail(data) {
         <tr><td class="label">White Table Cloths:</td><td class="val">${tableClothsDisplay}</td></tr>
         <tr><td class="label">Chair Sashes:</td><td class="val">${sashesDisplay}</td></tr>
         <tr><td class="label">Own Liquor / Decorator:</td><td class="val">Own Liquor: ${data.ownLiquor} | Using Decorator: ${data.usingDecorators}</td></tr>
+        ${data.usingDecorators === "Yes" ? `
+        <tr><td class="label">Name of the Decorator:</td><td class="val">${data.decoratorName || "N/A"}</td></tr>
+        <tr><td class="label">Amount Paying For Decoration:</td><td class="val">${data.decoratorAmount || "N/A"}</td></tr>
+        <tr><td class="label">Decorator Contact Number:</td><td class="val">${data.decoratorPhone || "N/A"}</td></tr>
+        ` : ""}
         <tr><td class="label">Serving Schedule:</td><td class="val">${data.servingTimes}</td></tr>
         <tr><td class="label">Special Requests / Notes:</td><td class="val">${data.specialRequests}</td></tr>
       </table>
