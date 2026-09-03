@@ -43,28 +43,29 @@ The scenarios below are derived from the browser tests in:
 
 ---
 
-### MS-02: More than three premium menu items are rejected
+### MS-02: More than three premium menu items display a warning note and allow submission
 
 | Field | Details |
 | --- | --- |
-| Test name | `test_rejects_more_than_three_premium_menu_items` |
-| Feature | Premium item limit enforcement |
+| Test name | `test_allows_more_than_three_premium_menu_items_with_warning_note` |
+| Feature | Premium item warning and submission allowance |
 | Input parameters | Complete valid form, then set 4 menu rows to values ending with ` * ` |
 | Setup | Use a valid menu configuration, then replace the first four `#itemNN` fields with `Paneer 65 *` |
-| Expected outcome | A browser alert is shown with: `You have selected 4 items marked with *. The package allows a maximum of 3.` |
-| Edge cases | Exactly 3 premium items are allowed; the 4th item triggers rejection |
+| Expected outcome | A red warning note is displayed above the submit button stating: `Note: You have selected 4 items marked with *. The package allows a maximum of 3 (additional charges apply for extra premium dishes).` No blocking alert dialog is shown, and submission proceeds successfully. |
+| Edge cases | Exactly 3 premium items are allowed without warning; selecting 4 or more shows the red warning note and still permits submission |
 
 #### Execution flow
 1. Open the form.
 2. Complete all valid fields.
 3. Mark four menu items as premium by appending ` * `.
 4. Trigger blur/click to validate the form state.
-5. Submit the form.
-6. Expect a validation dialog and no submission proceeds.
+5. Verify the red warning note is visible above the submit button.
+6. Submit the form.
+7. Confirm that submission succeeds and no blocking alert dialog appears.
 
 #### Validation notes
-- This is the enforcement boundary for the premium menu package.
-- It confirms the business rule is enforced before Google Apps Script submission.
+- Extra premium items are permitted with clear notice that additional charges apply.
+- Confirms the non-blocking warning note behaves properly and submission to Google Apps Script completes.
 
 ---
 
@@ -198,7 +199,7 @@ The scenarios below are derived from the browser tests in:
 - Calendar month navigation and date selection logic must handle month changes correctly.
 
 ### Validation boundaries
-- Premium item limit is enforced at exactly 3; 4 triggers a blocking error.
+- More than 3 premium dishes shows a red warning note above submit button while allowing submission.
 - Required user fields must be filled before submission for both flows.
 - Both forms check mandatory acknowledgement toggles before submission.
 
@@ -220,7 +221,7 @@ The following test-case IDs are covered by real automated pytest tests in the Ba
 | Test Case ID | Automated test | File |
 | --- | --- | --- |
 | MS-01 | `test_page_renders_with_minimum_date_and_company_footer` | `tests/test_menu_selection.py` |
-| MS-02 | `test_rejects_more_than_three_premium_menu_items` | `tests/test_menu_selection.py` |
+| MS-02 | `test_allows_more_than_three_premium_menu_items_with_warning_note` | `tests/test_menu_selection.py` |
 | MS-03 | `test_valid_menu_submission_posts_payload_and_resets_form` | `tests/test_menu_selection.py` |
 | INQ-01 | `test_availability_response_renders_open_and_booked_slots` | `tests/test_inquiry_form.py` |
 | INQ-02 | `test_availability_api_failure_shows_error` | `tests/test_inquiry_form.py` |
@@ -239,7 +240,7 @@ The following test-case IDs are covered by real automated pytest tests in the Ba
 | --- | --- | --- |
 | Menu rendering | Initial page state | Yes |
 | Date validation | Minimum allowed value | Yes |
-| Premium menu limit | Business rule enforcement | Yes |
+| Premium menu limit | Warning note & submission allowance | Yes |
 | Successful menu submit | Payload + reset + PDF workflow | Yes |
 | Availability display | Open versus booked slots | Yes |
 | Availability load error | API failure message | Yes |

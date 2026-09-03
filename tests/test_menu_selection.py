@@ -64,20 +64,47 @@ def test_page_renders_with_minimum_date_and_company_footer(page: Page, base_url:
 
 
 @pytest.mark.test_case_id("MS-02")
-def test_rejects_more_than_three_premium_menu_items(page: Page, base_url: str) -> None:
+def test_allows_more_than_three_premium_menu_items_with_warning_note(
+    page: Page, base_url: str
+) -> None:
+    submitted: dict[str, list[str]] = {}
+
+    def capture_submission(route: Route) -> None:
+        submitted.update(parse_qs(route.request.post_data or ""))
+        route.fulfill(status=200, content_type="text/plain", body="ok")
+
+    page.route("**/script.google.com/**", capture_submission)
     open_form(page, base_url)
     complete_valid_form(page)
     for item_number in range(1, 5):
         page.locator(f"#item{item_number:02}").fill("Paneer 65 *")
     page.evaluate("document.body.click()")
 
+    warning_note = page.locator("#premiumWarningNote")
+    expect(warning_note).to_be_visible()
+    expect(warning_note).to_contain_text(
+        "You have selected 4 items marked with *. The package allows a maximum of 3"
+    )
+
+    page.evaluate(
+        "generateAndDownloadPDF = formData => { window.testPdfData = formData; }"
+    )
+
     alerts: list[str] = []
     page.on("dialog", lambda dialog: (alerts.append(dialog.message), dialog.accept()))
     page.locator("#submitBtn").click()
 
-    assert alerts == [
+    assert (
         "You have selected 4 items marked with *. The package allows a maximum of 3."
+        not in alerts
+    )
+    assert alerts == [
+        "Thank you! Your menu selections have been recorded. A PDF summary with agreed Terms & Conditions has been downloaded, and a copy has been emailed to you and banquet management."
     ]
+    expect(page.locator("#name")).to_have_value("")
+    assert submitted["name"] == ["Test Guest"]
+    assert submitted["item01"] == ["Paneer 65 *"]
+    assert submitted["item04"] == ["Paneer 65 *"]
 
 
 @pytest.mark.test_case_id("MS-03")

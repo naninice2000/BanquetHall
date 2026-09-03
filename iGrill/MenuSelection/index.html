@@ -371,6 +371,20 @@
       margin-top: 0.25rem;
     }
 
+    .premium-warning-note {
+      display: none;
+      color: #b91c1c;
+      background-color: #fef2f2;
+      border: 1px solid #f87171;
+      border-radius: 6px;
+      padding: 0.85rem 1.1rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1.45;
+      text-align: center;
+    }
+
     .btn-submit {
       width: 100%;
       background-color: var(--primary);
@@ -578,9 +592,8 @@
               <label>Rice Selection (Included in Base) *</label>
               <div class="choice-group">
                 <label class="choice-label"><input type="radio" name="rice" value="Steamed Rice" required> Steamed Rice</label>
-                <label class="choice-label"><input type="radio" name="rice" value="Jeera Rice"> Jeera Rice</label>
+                <label class="choice-label"><input type="radio" name="rice" value="Jeera Rice / Pulao"> Jeera Rice / Pulao</label>
                 <label class="choice-label"><input type="radio" name="rice" value="Peas Pulao"> Peas Pulao</label>
-                <label class="choice-label"><input type="radio" name="rice" value="Jeera Pulao"> Jeera Pulao</label>
                 <label class="choice-label"><input type="radio" name="rice" value="Safron Pulao"> Safron Pulao</label>
                 <label class="choice-label"><input type="radio" name="rice" value="Mix Veg Pulao"> Mix Veg Pulao</label>
                 <label class="choice-label"><input type="radio" name="rice" value="Tamarind Rice"> Tamarind Rice</label>
@@ -800,6 +813,10 @@
               Acknowledgment: I acknowledge to adhere to all of the above terms and conditions *
             </label>
           </div>
+        </div>
+
+        <div id="premiumWarningNote" class="premium-warning-note" role="status" aria-live="polite">
+          <strong>Note:</strong> You have selected <span id="premiumCountNum">0</span> items marked with *. The package allows a maximum of 3 (additional charges apply for extra premium dishes).
         </div>
 
         <button type="submit" class="btn-submit" id="submitBtn">Submit Banquet Menu Selection</button>
@@ -1097,9 +1114,8 @@
           "Extra: Sambar (+$2.00)",
           "Extra: Veg Dum Biryani (+$2.00)",
           "Extra Rice: Steamed Rice (+$2.00)",
-          "Extra Rice: Jeera Rice (+$2.00)",
+          "Extra Rice: Jeera Rice/Pulav (+$2.00)",
           "Extra Rice: Peas Pulao (+$2.00)",
-          "Extra Rice: Jeera Pulao (+$2.00)",
           "Extra Rice: Safron Pulao (+$2.00)",
           "Extra Rice: Mix Veg Pulao (+$2.00)",
           "Extra Rice: Tamarind Rice (+$2.00)",
@@ -1226,6 +1242,8 @@
           noneLi.addEventListener("click", () => {
             input.value = "";
             dropdown.classList.remove("active");
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+            input.dispatchEvent(new Event("change", { bubbles: true }));
           });
           dropdown.appendChild(noneLi);
           totalMatches++;
@@ -1247,6 +1265,8 @@
               li.addEventListener("click", () => {
                 input.value = it;
                 dropdown.classList.remove("active");
+                input.dispatchEvent(new Event("input", { bubbles: true }));
+                input.dispatchEvent(new Event("change", { bubbles: true }));
               });
               dropdown.appendChild(li);
             });
@@ -1286,6 +1306,36 @@
 
     ['extra01', 'extra02', 'extra03', 'extra04', 'extra05'].forEach(id => {
       setupTypeahead(id, `${id}-dropdown`, EXTRA_MENU_GROUPS, true);
+    });
+
+    function updatePremiumWarning() {
+      const itemInputs = ['item01', 'item02', 'item03', 'item04', 'item05', 'item06'];
+      let premiumCount = 0;
+      for (const id of itemInputs) {
+        const input = document.getElementById(id);
+        if (input && input.value && input.value.includes('*')) {
+          premiumCount++;
+        }
+      }
+      const noteEl = document.getElementById('premiumWarningNote');
+      const countEl = document.getElementById('premiumCountNum');
+      if (noteEl) {
+        if (premiumCount > 3) {
+          if (countEl) countEl.textContent = premiumCount;
+          noteEl.style.display = 'block';
+        } else {
+          noteEl.style.display = 'none';
+        }
+      }
+      return premiumCount;
+    }
+
+    ['item01', 'item02', 'item03', 'item04', 'item05', 'item06'].forEach(id => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.addEventListener('input', updatePremiumWarning);
+        input.addEventListener('change', updatePremiumWarning);
+      }
     });
 
     function toggleOtherDrink(show) {
@@ -1432,10 +1482,7 @@
         if (val.includes('*')) premiumCount++;
       }
 
-      if (premiumCount > 3) {
-        alert("You have selected " + premiumCount + " items marked with *. The package allows a maximum of 3.");
-        return;
-      }
+      updatePremiumWarning();
 
       const tcChecked = Array.from(document.querySelectorAll('.tc-item')).every(box => box.checked);
       if (!tcChecked) {
@@ -1510,6 +1557,7 @@
         document.getElementById('banquet-form').reset();
         toggleOtherDrink(false);
         enforceMinEventDate();
+        updatePremiumWarning();
       } catch (err) {
         console.error("Submission dispatch error:", err);
         alert("Your menu PDF has been downloaded. If you do not receive an email copy shortly, please call us directly at (669) 230-6116.");
