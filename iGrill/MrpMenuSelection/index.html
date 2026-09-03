@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banquet Hall Menu Selection Form</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #c59d5f;
+      --primary-hover: #b08947;
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-surface: #f1f5f9;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --badge-bg: #fefce8;
+      --badge-border: #fef08a;
+      --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      font-size: 14.5px;
+      padding: 2.5rem 1rem;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: #fdf8f0;
+      color: var(--primary);
+      border: 1px solid rgba(197, 157, 95, 0.35);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.85rem;
+      border-radius: 20px;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header-section h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.4rem;
+    }
+
+    .title-divider {
+      width: 45px;
+      height: 3px;
+      background-color: var(--primary);
+      margin: 0 auto 0.75rem auto;
+      border-radius: 2px;
+    }
+
+    .header-section p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2.2rem 2rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    }
+
+    .rules-card {
+      background: #fafaf9;
+      border: 1px solid rgba(197, 157, 95, 0.35);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .rules-card h3 {
+      font-size: 1rem;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .rules-card ul {
+      padding-left: 1.2rem;
+      color: #44403c;
+      font-size: 0.86rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.3rem 1.5rem;
+    }
+
+    .section-block {
+      margin-bottom: 2rem;
+      padding-bottom: 1.8rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-block:last-of-type {
+      border-bottom: none;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .limit-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: #fdf8f0;
+      border: 1px solid rgba(197, 157, 95, 0.35);
+      padding: 0.15rem 0.65rem;
+      border-radius: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1rem;
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-dark);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-family: var(--font-family);
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .form-group select optgroup {
+      font-weight: 700;
+      color: var(--primary);
+      background: #ffffff;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(197, 157, 95, 0.2);
+    }
+
+    .choice-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .choice-row {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .choice-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 0.88rem;
+    }
+
+    .choice-label input {
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .info-callout {
+      background: #f8fafc;
+      border-left: 3px solid var(--primary);
+      padding: 0.65rem 0.9rem;
+      font-size: 0.82rem;
+      color: #334155;
+      border-radius: 0 4px 4px 0;
+      margin-top: 0.5rem;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: var(--primary);
+      color: #ffffff;
+      padding: 0.95rem;
+      border-radius: 6px;
+      font-family: var(--font-family);
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s, box-shadow 0.2s;
+      min-height: 48px;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(197, 157, 95, 0.3);
+    }
+
+    @media (max-width: 650px) {
+      body { padding: 1.25rem 0.5rem; }
+      .form-card { padding: 1.4rem 1rem; }
+      .form-grid-2, .form-grid-3, .rules-card ul { grid-template-columns: 1fr; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-section">
+      <span class="header-badge">Banquet Hall Catering</span>
+      <h1>Banquet Menu Selection Form</h1>
+      <div class="title-divider"></div>
+      <p>Configure your course selections, complimentary accompaniments, and optional add-ons.</p>
+    </div>
+
+    <div class="form-card">
+      
+      <!-- Rules Summary Box -->
+      <div class="rules-card">
+        <h3>Standard Package Inclusions</h3>
+        <ul>
+          <li>3 Appetizers (Veg, Non-Veg, or Chaats)</li>
+          <li>3 Main Courses (Curries, Daals, Biryanis)</li>
+          <li>1 Flavored Rice Selection</li>
+          <li>Fresh Naan Selection</li>
+          <li>1 Dessert Selection</li>
+          <li>Masala Tea & Complimentary Tap Water</li>
+          <li>Raita & Mirchi Ka Salan (Included w/ Biryanis)</li>
+          <li>Limit: Max 3 Premium Items (*) across all 6 courses</li>
+        </ul>
+      </div>
+
+      <form id="banquet-selection-form" onsubmit="handleMenuSubmit(event)">
+        
+        <!-- Section 1: Customer Details -->
+        <div class="section-block">
+          <div class="section-title">1. Event & Contact Details</div>
+          <div class="section-subtitle">Confirm your booking details for menu preparation.</div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" required placeholder="Full name" />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" required placeholder="(000) 000-0000" />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="eventDate">Event Date *</label>
+              <input type="date" id="eventDate" name="eventDate" required />
+            </div>
+            <div class="form-group">
+              <label for="guestCount">Estimated Guest Count *</label>
+              <input type="number" id="guestCount" name="guestCount" min="1" required placeholder="Total guests" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Appetizers (3 Selections) -->
+        <div class="section-block">
+          <div class="section-title">
+            <span>2. Appetizers & Starters</span>
+            <span class="limit-badge">3 Selections Included</span>
+          </div>
+          <div class="section-subtitle">Choose from Veg/Non-Veg Appetizers or Chaat items.</div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="app1">Appetizer #1 *</label>
+              <select id="app1" name="app1" class="appetizer-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="app2">Appetizer #2 *</label>
+              <select id="app2" name="app2" class="appetizer-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="app3">Appetizer #3 *</label>
+              <select id="app3" name="app3" class="appetizer-select" required></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Main Course (3 Selections) -->
+        <div class="section-block">
+          <div class="section-title">
+            <span>3. Main Course</span>
+            <span class="limit-badge">3 Selections Included</span>
+          </div>
+          <div class="section-subtitle">Choose from Curries (Veg/Paneer/Chicken/Mutton/Seafood), Daal items, or Biryanis.</div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="main1">Main Course #1 *</label>
+              <select id="main1" name="main1" class="mains-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="main2">Main Course #2 *</label>
+              <select id="main2" name="main2" class="mains-select" required></select>
+            </div>
+            <div class="form-group">
+              <label for="main3">Main Course #3 *</label>
+              <select id="main3" name="main3" class="mains-select" required></select>
+            </div>
+          </div>
+          <div class="info-callout">
+            Note: Mirchi Ka Salan and Raita are automatically included complimentary if Biryani is selected.
+          </div>
+        </div>
+
+        <!-- Section 4: Rice, Bread, Desserts & Tea -->
+        <div class="section-block">
+          <div class="section-title">
+            <span>4. Rice, Bread, Dessert & Tea</span>
+          </div>
+          <div class="section-subtitle">Package accompaniments and standard inclusions.</div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="riceChoice">Rice Selection (Select 1) *</label>
+              <select id="riceChoice" name="riceChoice" required>
+                <option value="">-- Choose Rice --</option>
+                <option value="White Rice">White Steamed Rice</option>
+                <option value="Peas Pulao">Peas Pulao</option>
+                <option value="Jeera Rice">Jeera Rice</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="breadChoice">Naan Selection *</label>
+              <select id="breadChoice" name="breadChoice" required>
+                <option value="Butter Naan">Butter Naan (Included)</option>
+                <option value="Garlic Naan (+$0.50/person)">Garlic Naan (+$0.50/person extra)</option>
+                <option value="Butter & Garlic Naan Mix (+$0.50/person)">Butter & Garlic Naan Mix (+$0.50/person extra)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="dessertChoice">Dessert Selection (Select 1) *</label>
+              <select id="dessertChoice" name="dessertChoice" required>
+                <option value="">-- Choose Dessert --</option>
+                <option value="Gulab Jamun">Warm Gulab Jamun</option>
+                <option value="Rasmalai">Rasmalai</option>
+                <option value="Gajar Ka Halwa">Gajar Ka Halwa</option>
+                <option value="Double Ka Meetha">Double Ka Meetha</option>
+                <option value="Rice Kheer">Rice Kheer</option>
+                <option value="Qubani Ka Meetha">Qubani Ka Meetha</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Complimentary Inclusions</label>
+              <div class="choice-group" style="padding-top: 0.4rem;">
+                <label class="choice-label"><input type="checkbox" checked disabled> Masala Tea (Included)</label>
+                <label class="choice-label"><input type="checkbox" checked disabled> Raita & Mirchi Ka Salan (w/ Biryani)</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: Optional Extra Dishes (Add-ons) -->
+        <div class="section-block">
+          <div class="section-title">
+            <span>5. Optional Extra Items & Add-ons</span>
+          </div>
+          <div class="section-subtitle">
+            Veg: $2/person (min $75) | Paneer/Chicken/Egg/Chaat: $2.50/person (min $100) | Lamb/Fish/Shrimp: $3/person (min $150)
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="extra1">Extra Item #1</label>
+              <select id="extra1" name="extra1" class="extra-select"><option value="">-- None --</option></select>
+            </div>
+            <div class="form-group">
+              <label for="extra2">Extra Item #2</label>
+              <select id="extra2" name="extra2" class="extra-select"><option value="">-- None --</option></select>
+            </div>
+            <div class="form-group">
+              <label for="extra3">Extra Item #3</label>
+              <select id="extra3" name="extra3" class="extra-select"><option value="">-- None --</option></select>
+            </div>
+            <div class="form-group">
+              <label for="extraDrink">Extra Drinks Add-on</label>
+              <select id="extraDrink" name="extraDrink">
+                <option value="">-- No Extra Drinks --</option>
+                <option value="Premium Drink Selection * ($1.00/person, min $50)">Premium Drinks * ($1.00/person, min $50)</option>
+                <option value="Standard Drink Selection ($1.50/person, min $50)">Standard Other Drinks ($1.50/person, min $50)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Banquet Menu</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const APPETIZER_OPTIONS_HTML = `
+      <option value="">-- Choose Appetizer --</option>
+      <optgroup label="Vegetarian Appetizers">
+        <option value="Vegetable Samosa">Vegetable Samosa</option>
+        <option value="Gobi 65">Gobi 65</option>
+        <option value="Gobi Manchurian">Gobi Manchurian</option>
+        <option value="Crispy Corn Pepper Fry">Crispy Corn Pepper Fry</option>
+        <option value="Cut Mirchi">Cut Mirchi</option>
+        <option value="Hara Bhara Kabab">Hara Bhara Kabab</option>
+      </optgroup>
+      <optgroup label="Chaat Items & Paneer (* Premium / Min Thresholds Apply)">
+        <option value="Samosa Chaat">Samosa Chaat</option>
+        <option value="Papdi Chaat">Papdi Chaat</option>
+        <option value="Pani Poori *">Pani Poori *</option>
+        <option value="Pav Bhaji *">Pav Bhaji *</option>
+        <option value="Paneer 65 *">Paneer 65 *</option>
+        <option value="Paneer Tikka *">Paneer Tikka *</option>
+        <option value="Chilli Paneer *">Chilli Paneer *</option>
+      </optgroup>
+      <optgroup label="Chicken Appetizers (* Premium)">
+        <option value="Chicken 65 *">Chicken 65 *</option>
+        <option value="Chili Chicken *">Chili Chicken *</option>
+        <option value="Chicken Manchurian *">Chicken Manchurian *</option>
+        <option value="Chicken Tikka Boti *">Chicken Tikka Boti *</option>
+        <option value="Chicken Seekh Kabab *">Chicken Seekh Kabab *</option>
+        <option value="Chicken Lollipop *">Chicken Lollipop *</option>
+      </optgroup>
+      <optgroup label="Lamb, Mutton & Seafood (* Premium Tier)">
+        <option value="Mutton Sukka Kabab *">Mutton Sukka Kabab *</option>
+        <option value="Apollo Fish *">Apollo Fish *</option>
+        <option value="Fish Fry / Tawa Fish *">Fish Fry / Tawa Fish *</option>
+        <option value="Chili Shrimp *">Chili Shrimp *</option>
+        <option value="Prawn 65 *">Prawn 65 *</option>
+      </optgroup>
+    `;
+
+    const MAIN_COURSE_OPTIONS_HTML = `
+      <option value="">-- Choose Main Course --</option>
+      <optgroup label="Vegetarian Curries & Daals">
+        <option value="Dal Makhani">Dal Makhani</option>
+        <option value="Dal Fry / Yellow Tadka">Dal Fry / Yellow Tadka</option>
+        <option value="Katti Dal">Katti Dal</option>
+        <option value="Chole Masala">Chole Masala</option>
+        <option value="Bhindi Masala">Bhindi Masala</option>
+        <option value="Navratan Korma">Navratan Korma</option>
+        <option value="Veg Dum Biryani">Veg Dum Biryani</option>
+      </optgroup>
+      <optgroup label="Paneer, Kofta & Chicken (* Premium)">
+        <option value="Paneer Butter Masala *">Paneer Butter Masala *</option>
+        <option value="Paneer Tikka Masala *">Paneer Tikka Masala *</option>
+        <option value="Palak Paneer *">Palak Paneer *</option>
+        <option value="Malai Kofta *">Malai Kofta *</option>
+        <option value="Butter Chicken *">Butter Chicken *</option>
+        <option value="Chicken Tikka Masala *">Chicken Tikka Masala *</option>
+        <option value="Chicken Chettinad Curry *">Chicken Chettinad Curry *</option>
+        <option value="Hyderabadi Chicken Dum Biryani *">Hyderabadi Chicken Dum Biryani *</option>
+        <option value="Egg Dum Biryani">Egg Dum Biryani</option>
+      </optgroup>
+      <optgroup label="Goat, Lamb, Mutton & Seafood (* Premium Tier)">
+        <option value="Goat Curry / Karahi *">Goat Curry / Karahi *</option>
+        <option value="Goat Sukka *">Goat Sukka *</option>
+        <option value="Goat Korma *">Goat Korma *</option>
+        <option value="Goat Dum Biryani *">Goat Dum Biryani *</option>
+        <option value="Mutton Keema Biryani *">Mutton Keema Biryani *</option>
+        <option value="Madras / Malabar Fish Curry *">Madras / Malabar Fish Curry *</option>
+        <option value="Prawn Masala *">Prawn Masala *</option>
+      </optgroup>
+    `;
+
+    const EXTRA_ITEMS_OPTIONS_HTML = `
+      <option value="">-- None --</option>
+      <optgroup label="Extra Veg ($2.00 / person, min $75)">
+        <option value="Extra: Veg Samosa ($2.00)">Extra: Veg Samosa</option>
+        <option value="Extra: Gobi 65 / Manchurian ($2.00)">Extra: Gobi 65 / Manchurian</option>
+        <option value="Extra: Dal Makhani / Tadka ($2.00)">Extra: Dal Makhani / Tadka</option>
+        <option value="Extra: Chole Masala ($2.00)">Extra: Chole Masala</option>
+        <option value="Extra: Veg Dum Biryani ($2.00)">Extra: Veg Dum Biryani</option>
+      </optgroup>
+      <optgroup label="Extra Paneer, Chicken, Kofta, Chaat ($2.50 / person, min $100)">
+        <option value="Extra: Pani Poori / Pav Bhaji ($2.50)">Extra: Pani Poori / Pav Bhaji</option>
+        <option value="Extra: Paneer Tikka / 65 ($2.50)">Extra: Paneer Tikka / 65</option>
+        <option value="Extra: Paneer Butter Masala ($2.50)">Extra: Paneer Butter Masala</option>
+        <option value="Extra: Malai Kofta ($2.50)">Extra: Malai Kofta</option>
+        <option value="Extra: Chicken 65 / Tikka Boti ($2.50)">Extra: Chicken 65 / Tikka Boti</option>
+        <option value="Extra: Butter Chicken / CTM ($2.50)">Extra: Butter Chicken / CTM</option>
+        <option value="Extra: Chicken Dum Biryani ($2.50)">Extra: Chicken Dum Biryani</option>
+      </optgroup>
+      <optgroup label="Extra Lamb/Mutton, Fish & Shrimp ($3.00 / person, min $150)">
+        <option value="Extra: Mutton Sukka Kabab ($3.00)">Extra: Mutton Sukka Kabab</option>
+        <option value="Extra: Apollo Fish / Prawn 65 ($3.00)">Extra: Apollo Fish / Prawn 65</option>
+        <option value="Extra: Goat Curry / Sukka ($3.00)">Extra: Goat Curry / Sukka</option>
+        <option value="Extra: Goat Dum Biryani ($3.00)">Extra: Goat Dum Biryani</option>
+        <option value="Extra: Fish / Prawn Masala ($3.00)">Extra: Fish / Prawn Masala</option>
+      </optgroup>
+    `;
+
+    document.querySelectorAll('.appetizer-select').forEach(el => el.innerHTML = APPETIZER_OPTIONS_HTML);
+    document.querySelectorAll('.mains-select').forEach(el => el.innerHTML = MAIN_COURSE_OPTIONS_HTML);
+    document.querySelectorAll('.extra-select').forEach(el => el.innerHTML = EXTRA_ITEMS_OPTIONS_HTML);
+
+    function handleMenuSubmit(e) {
+      e.preventDefault();
+
+      const apps = [document.getElementById('app1').value, document.getElementById('app2').value, document.getElementById('app3').value];
+      const mains = [document.getElementById('main1').value, document.getElementById('main2').value, document.getElementById('main3').value];
+      const allSixSelections = [...apps, ...mains];
+
+      const uniqueCheck = new Set(allSixSelections);
+      if (uniqueCheck.size < 6) {
+        alert("Please ensure all 3 Appetizers and 3 Main Courses are distinct items.");
+        return;
+      }
+
+      let premiumCount = 0;
+      allSixSelections.forEach(item => {
+        if (item.includes('*')) {
+          premiumCount++;
+        }
+      });
+
+      if (premiumCount > 3) {
+        alert(`You have selected ${premiumCount} premium items (*). The package allows up to 3 premium choices across appetizers and main course. Additional premium dishes will incur extra charges.`);
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Processing Selection...";
+
+      setTimeout(() => {
+        alert("Thank you! Your banquet menu selections have been recorded successfully.");
+        document.getElementById('banquet-selection-form').reset();
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Banquet Menu";
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
