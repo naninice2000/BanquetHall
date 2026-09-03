@@ -60,6 +60,7 @@ def complete_form(page: Page) -> None:
     page.locator("#adultGuests").fill("50")
 
 
+@pytest.mark.test_case_id("INQ-01")
 def test_availability_response_renders_open_and_booked_slots(page: Page, base_url: str) -> None:
     target = future_date()
     date_string = target.isoformat()
@@ -74,6 +75,7 @@ def test_availability_response_renders_open_and_booked_slots(page: Page, base_ur
     expect(page.locator(f'[title="{date_string} - Dinner: Booked / TempHold"]')).to_be_visible()
 
 
+@pytest.mark.test_case_id("INQ-02")
 def test_availability_api_failure_shows_error(page: Page, base_url: str) -> None:
     page.route("**/script.google.com/**", lambda route: route.abort("failed"))
 
@@ -84,6 +86,7 @@ def test_availability_api_failure_shows_error(page: Page, base_url: str) -> None
     )
 
 
+@pytest.mark.test_case_id("INQ-03")
 def test_successful_inquiry_submission(page: Page, base_url: str) -> None:
     target = future_date()
     mock_google_api(page, [{"date": target.isoformat(), "slot": "Lunch", "isOpen": True}])
@@ -100,6 +103,7 @@ def test_successful_inquiry_submission(page: Page, base_url: str) -> None:
     expect(page.locator("#name")).to_have_value("")
 
 
+@pytest.mark.test_case_id("INQ-04")
 def test_submission_api_failure_preserves_form_and_allows_retry(page: Page, base_url: str) -> None:
     target = future_date()
     mock_google_api(

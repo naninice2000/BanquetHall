@@ -53,6 +53,7 @@ def complete_valid_form(page: Page) -> None:
     page.locator("#finalAck").check()
 
 
+@pytest.mark.test_case_id("MS-01")
 def test_page_renders_with_minimum_date_and_company_footer(page: Page, base_url: str) -> None:
     open_form(page, base_url)
 
@@ -62,6 +63,7 @@ def test_page_renders_with_minimum_date_and_company_footer(page: Page, base_url:
     expect(page.locator("footer")).to_have_text("Powered by Lightning Ventures LLC")
 
 
+@pytest.mark.test_case_id("MS-02")
 def test_rejects_more_than_three_premium_menu_items(page: Page, base_url: str) -> None:
     open_form(page, base_url)
     complete_valid_form(page)
@@ -78,6 +80,7 @@ def test_rejects_more_than_three_premium_menu_items(page: Page, base_url: str) -
     ]
 
 
+@pytest.mark.test_case_id("MS-03")
 def test_valid_menu_submission_posts_payload_and_resets_form(
     page: Page, base_url: str
 ) -> None:
